@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./List.css";
 import { toast } from "react-toastify";
-import api from "../../utils/api";
-import { API_BASE } from "../../utils/config";
+import api from "../../../utils/api";
+import { API_BASE } from "../../../utils/config";
 
 const List = () => {
   const [list, setList] = useState([]);

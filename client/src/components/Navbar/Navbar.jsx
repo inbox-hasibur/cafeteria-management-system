@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import "./Navbar.css";
 import { assets } from "../../assets/assets";
 import { Link, useNavigate } from "react-router-dom";
@@ -12,6 +12,7 @@ const Navbar = ({ setShowLogin }) => {
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("isAdmin");
     setToken("");
     navigate("/");
   };
@@ -83,6 +84,17 @@ const Navbar = ({ setShowLogin }) => {
                   <p>Orders</p>
                 </Link>
               </li>
+              {localStorage.getItem("isAdmin") === "true" && (
+                <>
+                  <hr />
+                  <li>
+                    <Link to="/admin" style={{ display: "flex", gap: "10px" }}>
+                      <img src={assets.profile_icon} width="20" alt="Admin" />
+                      <p>Dashboard</p>
+                    </Link>
+                  </li>
+                </>
+              )}
               <hr />
               <li onClick={logout}>
                 <img src={assets.logout_icon} alt="Logout" />

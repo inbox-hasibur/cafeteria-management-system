@@ -21,7 +21,7 @@ const LoginPopup = ({ setShowLogin }) => {
   const onLogin = async (event) => {
     event.preventDefault();
     setLoading(true);
-    let endpoint = currentState === "Login" ? "/api/user/login" : "/api/user/register";
+    let endpoint = currentState === "Login" || currentState === "Admin Login" ? "/api/user/login" : "/api/user/register";
 
     try {
       const response = await api.post(endpoint, data);
@@ -29,8 +29,17 @@ const LoginPopup = ({ setShowLogin }) => {
       if (response.data.success) {
         setToken(response.data.token);
         localStorage.setItem("token", response.data.token);
+        
+        // Store Admin status and redirect
+        if (response.data.user && response.data.user.role === "admin") {
+          localStorage.setItem("isAdmin", "true");
+          window.location.href = "/admin/add"; // Force reload to pickup route layout
+        } else {
+          localStorage.setItem("isAdmin", "false");
+        }
+
         setShowLogin(false);
-        toast.success(`Successfully ${currentState === "Login" ? "logged in" : "registered"}!`);
+        toast.success(`Successfully ${currentState === "Sign Up" ? "registered" : "logged in"}!`);
       } else {
         toast.error(response.data.message);
       }
@@ -85,16 +94,17 @@ const LoginPopup = ({ setShowLogin }) => {
         <button type="submit" disabled={loading}>
           {loading ? "Please wait..." : (currentState === "Sign Up" ? "Create account" : "Login")}
         </button>
-        {currentState === "Login" ? (
-          <p>
-            Don't have an account?{" "}
-            <span onClick={() => setCurrentState("Sign Up")}>Sign Up</span>
-          </p>
-        ) : (
-          <p>
-            Already have an account?{" "}
-            <span onClick={() => setCurrentState("Login")}>Login</span>
-          </p>
+        {currentState === "Login" && (
+          <>
+            <p>Don't have an account? <span onClick={() => setCurrentState("Sign Up")}>Sign Up</span></p>
+            <p>Are you an Admin? <span onClick={() => setCurrentState("Admin Login")}>Admin Login</span></p>
+          </>
+        )}
+        {currentState === "Sign Up" && (
+          <p>Already have an account? <span onClick={() => setCurrentState("Login")}>Login</span></p>
+        )}
+        {currentState === "Admin Login" && (
+          <p>Back to Customer? <span onClick={() => setCurrentState("Login")}>Login</span></p>
         )}
       </form>
     </div>

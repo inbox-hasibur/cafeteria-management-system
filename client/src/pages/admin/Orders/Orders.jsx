@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Orders.css";
-import { assets } from "../../assets/assets";
-import api from "../../utils/api";
+import { assets } from "../../../assets/assets";
+import api from "../../../utils/api";
 import { toast } from "react-toastify";
 
 const Orders = () => {

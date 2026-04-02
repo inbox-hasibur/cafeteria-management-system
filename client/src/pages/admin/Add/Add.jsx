@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Add.css';
-import { assets } from '../../assets/assets'; 
-import api from "../../utils/api";
+import { assets } from '../../../assets/assets'; 
+import api from "../../../utils/api";
 import { toast } from 'react-toastify';
 
 const Add = () => {
