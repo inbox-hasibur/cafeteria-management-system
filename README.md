@@ -52,25 +52,18 @@ This repository contains a monorepo setup:
    ```
 
 3. **Install Dependencies and Run:**
-   You will need to run the client, admin, and server concurrently on different terminals.
+   You will only need **two terminals** now because the Admin and Client have been unified into one React app!
 
-   *Terminal 1 (Server):*
+   *Terminal 1 (Backend API Server):*
    ```sh
    cd server
    npm install
    npm run dev
    ```
 
-   *Terminal 2 (Client):*
+   *Terminal 2 (Unified Frontend):*
    ```sh
    cd client
-   npm install
-   npm run dev
-   ```
-
-   *Terminal 3 (Admin):*
-   ```sh
-   cd admin
    npm install
    npm run dev
    ```
