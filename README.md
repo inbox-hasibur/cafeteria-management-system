@@ -68,6 +68,13 @@ This repository contains a monorepo setup:
    npm run dev
    ```
 
+## 🔒 Admin Credentials
+
+To access the backend Food and Order management portal, click "Sign In" on the Navbar, select the **Admin Login** toggle option, and use the following default root access credentials:
+
+- **Username / Email:** `admin`
+- **Password:** `admin123`
+
 ## 🌐 Live URLs
 
 - **Client**: https://iubat-lemonlime.vercel.app/
