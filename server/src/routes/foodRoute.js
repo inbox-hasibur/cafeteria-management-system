@@ -1,20 +1,33 @@
-import express from 'express';
-import { addFood, listFood, removeFood} from '../controllers/foodController.js';
-import multer from 'multer';
+import express from "express";
+import {
+  addFood,
+  listFood,
+  removeFood,
+  updateFood,
+} from "../controllers/foodController.js";
+import multer from "multer";
+import { v2 as cloudinary } from "cloudinary";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
 
 const foodRouter = express.Router();
 
-const storage = multer.diskStorage({
-    destination:"uploads",
-    filename: (req, file, cb) => {
-        return cb(null, `${Date.now()}-${file.originalname}`)
-    }
-});
-    
-const upload = multer({ storage: storage })
+// Cloudinary connection is auto-configured via CLOUDINARY_URL in .env
 
-foodRouter.post('/add', upload.single('image'), addFood);
-foodRouter.get('/list', listFood)
-foodRouter.post('/remove', removeFood)
+// Cloudinary Storage Config
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "lemonlime-foods", // Folder name in Cloudinary
+    allowedFormats: ["jpg", "png", "jpeg", "webp"],
+  },
+});
+
+const upload = multer({ storage: storage });
+
+// Routes
+foodRouter.post("/add", upload.single("image"), addFood);
+foodRouter.get("/list", listFood);
+foodRouter.post("/remove", removeFood);
+foodRouter.put("/update/:id", upload.single("image"), updateFood);
 
 export default foodRouter;

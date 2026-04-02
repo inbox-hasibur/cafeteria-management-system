@@ -76,3 +76,30 @@
     height: 1px;
     background-color: #e2e2e2;
 }
+
+.cart-empty {
+  text-align: center;
+  margin: 100px auto;
+  color: #808080;
+}
+
+.cart-empty h2 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.cart-empty .shop-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #7ebf08;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.cart-empty .shop-btn:hover {
+  background-color: #6bae06;
+}

@@ -7,13 +7,19 @@ import api from "../../utils/api";
 const MyOrders = () => {
   const { token } = useContext(StoreContext);
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchOrders = async () => {
+    setLoading(true);
     try {
       const response = await api.get("/api/orders/userorders");
-      setData(response.data.data);
+      if (response.data.success) {
+        setData(response.data.data);
+      }
     } catch (error) {
       console.error("Error fetching orders:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -22,30 +28,6 @@ const MyOrders = () => {
       fetchOrders();
     }
   }, [token]);
-
-  // Static data fallback
-  const staticData = [
-    {
-      id: 1,
-      items: [
-        { name: "Item A", quantity: 2 },
-        { name: "Item B", quantity: 1 },
-      ],
-      amount: 50,
-      status: "Delivered",
-    },
-    {
-      id: 2,
-      items: [
-        { name: "Item C", quantity: 3 },
-        { name: "Item D", quantity: 2 },
-      ],
-      amount: 75,
-      status: "Processing",
-    },
-  ];
-
-  const orders = data.length > 0 ? data : staticData;
 
   const handlePrintInvoice = (order) => {
     const invoiceWindow = window.open("", "_blank");
@@ -64,12 +46,16 @@ const MyOrders = () => {
         </head>
         <body>
           <h1>Invoice</h1>
+          <p><strong>Order ID:</strong> ${order._id}</p>
           <p><strong>Status:</strong> ${order.status}</p>
+          <p><strong>Date:</strong> ${new Date(order.createdAt).toLocaleDateString()}</p>
           <table>
             <thead>
               <tr>
                 <th>Item</th>
+                <th>Price</th>
                 <th>Quantity</th>
+                <th>Total</th>
               </tr>
             </thead>
             <tbody>
@@ -78,14 +64,16 @@ const MyOrders = () => {
                   (item) => `
                 <tr>
                   <td>${item.name}</td>
+                  <td>BDT ${item.price}</td>
                   <td>${item.quantity}</td>
+                  <td>BDT ${item.price * item.quantity}</td>
                 </tr>
               `
                 )
                 .join("")}
             </tbody>
           </table>
-          <p class="total">Total Amount: $${order.amount}.00</p>
+          <p class="total">Total Amount: BDT ${order.amount}</p>
         </body>
       </html>
     `;
@@ -94,35 +82,43 @@ const MyOrders = () => {
     invoiceWindow.print();
   };
 
+  if (loading) {
+    return <div className="my-orders"><p>Loading your orders...</p></div>;
+  }
+
   return (
     <div className="my-orders">
       <h2>My Orders</h2>
       <div className="container">
-        {orders?.map((order, index) => {
-          return (
-            <div key={index} className="my-orders-order">
-              <img src={assets.parcel_icon} alt="" />
-              <p>
-                {order.items.map((item, index) => {
-                  if (index === order.items.length - 1) {
-                    return item.name + " x " + item.quantity;
-                  } else {
-                    return item.name + " x " + item.quantity + ", ";
-                  }
-                })}
-              </p>
-              <p>${order.amount}.00</p>
-              <p>Items: {order.items.length}</p>
-              <p>
-                <span>&#x25cf;</span>
-                <b>{order.status}</b>
-              </p>
-              <button onClick={() => handlePrintInvoice(order)}>
-                Print Invoice
-              </button>
-            </div>
-          );
-        })}
+        {data.length === 0 ? (
+          <p>You haven't placed any orders yet.</p>
+        ) : (
+          data.map((order, index) => {
+            return (
+              <div key={index} className="my-orders-order">
+                <img src={assets.parcel_icon} alt="" />
+                <p>
+                  {order.items.map((item, index) => {
+                    if (index === order.items.length - 1) {
+                      return item.name + " x " + item.quantity;
+                    } else {
+                      return item.name + " x " + item.quantity + ", ";
+                    }
+                  })}
+                </p>
+                <p>BDT {order.amount}</p>
+                <p>Items: {order.items.length}</p>
+                <p>
+                  <span>&#x25cf;</span>
+                  <b>{order.status}</b>
+                </p>
+                <button onClick={() => handlePrintInvoice(order)}>
+                  Print Invoice
+                </button>
+              </div>
+            );
+          })
+        )}
       </div>
     </div>
   );

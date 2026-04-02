@@ -2,11 +2,24 @@ import Stripe from "stripe";
 import orderModel from "../models/orderModel.js";
 import userModel from "../models/userModel.js";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const DELIVERY_FEE = 70; // BDT
 
-// Placing user order from frontend
+// Initialize Stripe only if key is available
+const stripe = process.env.STRIPE_SECRET_KEY
+  ? new Stripe(process.env.STRIPE_SECRET_KEY)
+  : null;
+
+// Place order from frontend
 const placeOrder = async (req, res) => {
-  const frontend_url = process.env.STRIPE_FRONTEND_URL || "http://localhost:5173";
+  if (!stripe) {
+    return res.json({
+      success: false,
+      message: "Payment service is not configured",
+    });
+  }
+
+  const frontend_url =
+    process.env.STRIPE_FRONTEND_URL || "http://localhost:5173";
 
   try {
     const newOrder = new orderModel({
@@ -28,13 +41,15 @@ const placeOrder = async (req, res) => {
       },
       quantity: item.quantity,
     }));
+
+    // Add delivery charges
     line_items.push({
       price_data: {
         currency: "bdt",
         product_data: {
           name: "Delivery Charges",
         },
-        unit_amount: Math.round(57 * 100),
+        unit_amount: Math.round(DELIVERY_FEE * 100),
       },
       quantity: 1,
     });
@@ -48,61 +63,69 @@ const placeOrder = async (req, res) => {
 
     res.json({ success: true, session_url: session.url });
   } catch (error) {
-    console.log(error);
+    console.error("Error placing order:", error);
     res.json({ success: false, message: "Error placing order" });
   }
 };
 
+// Verify payment
 const verifyOrder = async (req, res) => {
   const { orderId, success } = req.body;
   try {
-    if (success == "true") {
+    if (success === "true") {
       await orderModel.findByIdAndUpdate(orderId, { payment: true });
-      res.json({ success: true, message: "Paid" });
+      res.json({ success: true, message: "Payment verified" });
     } else {
       await orderModel.findByIdAndDelete(orderId);
-      res.json({ success: false, message: "Payment failed" });
+      res.json({ success: false, message: "Payment cancelled" });
     }
   } catch (error) {
-    console.log(error);
-    res.json({ success: false, message: "Error" });
+    console.error("Error verifying order:", error);
+    res.json({ success: false, message: "Error verifying payment" });
   }
 };
 
-// User orders for frontend
+// Get user's orders
 const userOrders = async (req, res) => {
   try {
-    const orders = await orderModel.find({ userId: req.userId });
+    const orders = await orderModel
+      .find({ userId: req.userId })
+      .sort({ createdAt: -1 });
     res.json({ success: true, data: orders });
   } catch (error) {
-    console.log(error);
-    res.json({ success: false, message: "Error" });
+    console.error("Error fetching user orders:", error);
+    res.json({ success: false, message: "Error fetching orders" });
   }
 };
 
-// Orders for admin Pannel
+// Get all orders (admin)
 const listOrders = async (req, res) => {
   try {
-    const orders = await orderModel.find({});
+    const orders = await orderModel.find({}).sort({ createdAt: -1 });
     res.json({ success: true, data: orders });
   } catch (error) {
-    console.log(error);
-    res.json({ success: false, message: "Error" });
+    console.error("Error listing orders:", error);
+    res.json({ success: false, message: "Error fetching orders" });
   }
 };
 
-// api for updating order status
+// Update order status (admin)
 const updateStatus = async (req, res) => {
   try {
-    await orderModel.findByIdAndUpdate(req.body.orderId, {
-      status: req.body.status,
-    });
+    const { orderId, status } = req.body;
+    const order = await orderModel.findByIdAndUpdate(
+      orderId,
+      { status },
+      { new: true }
+    );
+    if (!order) {
+      return res.json({ success: false, message: "Order not found" });
+    }
     res.json({ success: true, message: "Status updated" });
   } catch (error) {
-    console.log(error);
-    res.json({ success: false, message: "Error" });
+    console.error("Error updating status:", error);
+    res.json({ success: false, message: "Error updating status" });
   }
 };
 
 export { listOrders, placeOrder, updateStatus, userOrders, verifyOrder };
-

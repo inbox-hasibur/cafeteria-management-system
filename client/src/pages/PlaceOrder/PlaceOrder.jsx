@@ -1,12 +1,15 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import "./PlaceOrder.css";
 import { StoreContext } from "../../context/StoreContext";
-import axios from "axios";
-import { API_BASE } from "../../utils/config";
+import api from "../../utils/api";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const PlaceOrder = () => {
   const { getTotalCartAmount, token, food_list, cartItems } =
     useContext(StoreContext);
+    
+  const navigate = useNavigate();
 
   const [data, setData] = React.useState({
     firstName: "",
@@ -19,6 +22,15 @@ const PlaceOrder = () => {
     country: "",
     phone: "",
   });
+
+  useEffect(() => {
+    if (!token) {
+      toast.error("Please login to place an order");
+      navigate("/cart");
+    } else if (getTotalCartAmount() === 0) {
+      navigate("/cart");
+    }
+  }, [token, getTotalCartAmount, navigate]);
 
   const onChangeHandler = (event) => {
     const name = event.target.name;
@@ -36,19 +48,23 @@ const PlaceOrder = () => {
         orderItems.push(itemInfo);
       }
     });
+
     let orderData = {
       address: data,
       items: orderItems,
       amount: getTotalCartAmount() + 70,
     };
-    let response = await axios.post(API_BASE + "/api/orders/place", orderData, {
-      headers: { token: token },
-    });
-    if (response.data.success) {
-      const { session_url } = response.data;
-      window.location.replace(session_url);
-    } else {
-      alert("Error");
+
+    try {
+      let response = await api.post("/api/orders/place", orderData);
+      if (response.data.success) {
+        const { session_url } = response.data;
+        window.location.replace(session_url);
+      } else {
+        toast.error(response.data.message || "Error placing order");
+      }
+    } catch (error) {
+      toast.error("Server error. Please try again later.");
     }
   };
 
@@ -146,7 +162,7 @@ const PlaceOrder = () => {
             <hr />
             <div className="cart-total-details">
               <p>Delivery Fee</p>
-              <p>BDT {70}</p>
+              <p>BDT 70</p>
             </div>
             <hr />
             <div className="cart-total-details">

@@ -1,5 +1,4 @@
 import { createContext, useState, useEffect } from "react";
-// import { food_list } from "../assets/assets";
 import api from "../utils/api";
 
 export const StoreContext = createContext(null);
@@ -8,6 +7,8 @@ const StoreContextProvider = (props) => {
   const [cartItems, setCartItems] = useState({});
   const [token, setToken] = useState("");
   const [foodList, setFoodList] = useState([]);
+  const [category, setCategory] = useState("All");
+  const [loading, setLoading] = useState(true);
 
   const addToCart = async (itemId) => {
     if (!cartItems[itemId]) {
@@ -16,14 +17,31 @@ const StoreContextProvider = (props) => {
       setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
     }
     if (token) {
-      await api.post("/api/cart/add", { itemId });
+      try {
+        await api.post("/api/cart/add", { itemId });
+      } catch (error) {
+        console.error("Error adding to cart:", error);
+      }
     }
   };
 
   const removeFromCart = async (itemId) => {
-    setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
+    setCartItems((prev) => {
+      const newCount = prev[itemId] - 1;
+      if (newCount <= 0) {
+        const newCart = { ...prev };
+        delete newCart[itemId];
+        return newCart;
+      }
+      return { ...prev, [itemId]: newCount };
+    });
+    
     if (token) {
-      await api.post("/api/cart/remove", { itemId });
+      try {
+        await api.post("/api/cart/remove", { itemId });
+      } catch (error) {
+        console.error("Error removing from cart:", error);
+      }
     }
   };
 
@@ -41,22 +59,34 @@ const StoreContextProvider = (props) => {
   };
 
   const fetchFoodList = async () => {
-    const response = await api.get("/api/food/list");
-    setFoodList(response.data.food);
+    try {
+      setLoading(true);
+      const response = await api.get("/api/food/list");
+      setFoodList(response.data.food);
+    } catch (error) {
+      console.error("Error fetching food list:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const loadCartData = async () => {
-    const response = await api.get("/api/cart/get");
-    if (response.data.cartData) {
-      setCartItems(response.data.cartData);
+    try {
+      const response = await api.get("/api/cart/get");
+      if (response.data.cartData) {
+        setCartItems(response.data.cartData);
+      }
+    } catch (error) {
+      console.error("Error loading cart data:", error);
     }
   };
 
   useEffect(() => {
     async function loadData() {
       await fetchFoodList();
-      if (localStorage.getItem("token")) {
-        setToken(localStorage.getItem("token"));
+      const savedToken = localStorage.getItem("token");
+      if (savedToken) {
+        setToken(savedToken);
         await loadCartData();
       }
     }
@@ -72,6 +102,9 @@ const StoreContextProvider = (props) => {
     getTotalCartAmount,
     token,
     setToken,
+    category,
+    setCategory,
+    loading
   };
 
   return (

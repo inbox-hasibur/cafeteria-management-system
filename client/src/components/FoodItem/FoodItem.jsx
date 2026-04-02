@@ -12,7 +12,7 @@ const FoodItem = ({ id, name, price, description, image }) => {
       <div className="food-item-img-container">
         <img
           className="food-item-image"
-          src={API_BASE + "/images/" + image}
+          src={image && image.startsWith("http") ? image : API_BASE + "/images/" + image}
           alt=""
         />
         {!cartItems[id] ? (

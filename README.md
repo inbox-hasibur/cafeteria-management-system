@@ -1,11 +1,84 @@
-# MERN_Restaurant-management-system
+# Lemonlime Cafeteria Management System
 
-A simple and efficient restaurant management system built using the MERN stack (MongoDB, Express, React, Node.js). This system allows users to browse food items, manage orders, make secure payments via Stripe, and handle user authentication (login/signup). It is designed to streamline restaurant operations and enhance the user experience.
+A complete MERN stack-based restaurant and cafeteria management system. Features an elegant user-facing ordering platform and a comprehensive admin panel for restaurant management.
 
-# Live urls
+## 🚀 Features
 
-admin : https://mern-rms.vercel.app/
+### Client (User Facing)
+- **Menu Exploration**: Category-based food filtering
+- **Cart System**: Real-time cart updates with state management
+- **User Authentication**: Secure JWT-based login/signup
+- **Secure Checkout**: Stripe integration for live payments
+- **Order Tracking**: Order history with invoice printing
+- **Interactive UI**: Toast notifications, loading states, and responsive design
 
-client: https://iubat-lemonlime.vercel.app/
+### Admin Panel
+- **Food Management**: Add, List, and Delete food items with category support
+- **Image Upload**: Seamless food image uploads using Multer
+- **Order Processing**: Real-time order status updates (Pending -> Processing -> Delivered)
+- **Reporting**: Admin-side invoice ticket printing
 
-server: https://mern-rms.onrender.com
+## 🥞 Tech Stack
+
+- **Frontend**: React.js, Vite, React Router, Context API
+- **Styling**: Vanilla CSS with modern responsive techniques
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB (Mongoose)
+- **Authentication**: JWT, bcrypt
+- **Payments**: Stripe API
+- **File Uploads**: Multer
+
+## 📦 Project Structure
+This repository contains a monorepo setup:
+- `/client` - The customer facing Vite React application
+- `/admin` - The restaurant staff facing Vite React administration panel 
+- `/server` - The Node/Express API backend
+
+## ⚙️ Installation & Setup
+
+1. **Clone the repository:**
+   ```sh
+   git clone https://github.com/inbox-hasibur/MERN_Restaurant-management-system.git
+   ```
+
+2. **Setup Environment Variables:**
+   Navigate into the `/server` folder and create a `.env` file based on `.env.example`:
+   ```env
+   MONGO_URL=your_mongodb_connection_string
+   JWT_SECRET=your_jwt_secret
+   STRIPE_SECRET_KEY=your_stripe_secret_key
+   STRIPE_FRONTEND_URL=http://localhost:5173
+   PORT=4000
+   ```
+
+3. **Install Dependencies and Run:**
+   You will need to run the client, admin, and server concurrently on different terminals.
+
+   *Terminal 1 (Server):*
+   ```sh
+   cd server
+   npm install
+   npm run dev
+   ```
+
+   *Terminal 2 (Client):*
+   ```sh
+   cd client
+   npm install
+   npm run dev
+   ```
+
+   *Terminal 3 (Admin):*
+   ```sh
+   cd admin
+   npm install
+   npm run dev
+   ```
+
+## 🌐 Live URLs
+
+- **Client**: https://iubat-lemonlime.vercel.app/
+- **Admin**: https://mern-rms.vercel.app/
+- **API Server**: https://mern-rms.onrender.com
+
+*(Note: Provide your own configuration variables in the client and admin `config.js` to point to a custom local or hosted server)*

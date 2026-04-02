@@ -10,6 +10,18 @@ const Cart = () => {
 
   const navigate = useNavigate();
 
+  if (getTotalCartAmount() === 0) {
+    return (
+      <div className="cart-empty">
+        <h2>Your Cart is Empty</h2>
+        <p>Looks like you haven't added anything to your cart yet.</p>
+        <button onClick={() => navigate("/")} className="shop-btn">
+          Explore Menu
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="cart">
       <div className="cart-items">
@@ -28,7 +40,7 @@ const Cart = () => {
             return (
               <div key={item._id}>
                 <div className="cart-items-title cart-items-item">
-                  <img src={API_BASE + "/images/" + item.image} alt="" />
+                  <img src={item.image && item.image.startsWith("http") ? item.image : API_BASE + "/images/" + item.image} alt="" />
                   <p>{item.name}</p>
                   <p>BDT {item.price}</p>
                   <p>{cartItems[item._id]}</p>
@@ -41,6 +53,7 @@ const Cart = () => {
               </div>
             );
           }
+          return null;
         })}
       </div>
       <div className="cart-bottom">
@@ -54,7 +67,7 @@ const Cart = () => {
             <hr />
             <div className="cart-total-details">
               <p>Delivery Fee</p>
-              <p>BDT {70}</p>
+              <p>BDT 70</p>
             </div>
             <hr />
             <div className="cart-total-details">
@@ -62,12 +75,9 @@ const Cart = () => {
               <b>BDT {getTotalCartAmount() + 70}</b>
             </div>
           </div>
-          <div className="cart-buttons">
-            <button onClick={() => navigate("/order")}>
-              PROCEED TO CHECKOUT
-            </button>
-            <button className="submit-btn">SUBMIT ORDER</button>
-          </div>
+          <button onClick={() => navigate("/order")}>
+            PROCEED TO CHECKOUT
+          </button>
         </div>
       </div>
     </div>

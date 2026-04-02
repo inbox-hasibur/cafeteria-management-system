@@ -3,9 +3,14 @@ import { API_BASE } from "./config";
 
 const api = axios.create({
   baseURL: API_BASE,
-  headers: {
-    token: localStorage.getItem("token"),
-  },
+});
+
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.token = token;
+  }
+  return config;
 });
 
 export default api;

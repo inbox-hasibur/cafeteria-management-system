@@ -10,10 +10,8 @@ const List = () => {
   const fetchList = async () => {
     try {
       const response = await api.get(`/api/food/list`);
-      console.log("Fetched List Data:", response.data); // Debugging response
-
       if (response.data.success) {
-        setList(response.data.food); // Update the state with fetched data
+        setList(response.data.food);
       } else {
         toast.error("Error fetching list");
       }
@@ -28,10 +26,10 @@ const List = () => {
       const response = await api.post(`/api/food/remove`, {
         id: foodId,
       });
-      await fetchList(); // Refetch the list after removal
 
       if (response.data.success) {
         toast.success(response.data.message);
+        await fetchList();
       } else {
         toast.error("Error removing food");
       }
@@ -41,7 +39,7 @@ const List = () => {
   };
 
   useEffect(() => {
-    fetchList(); // Call the fetch function when the component mounts
+    fetchList();
   }, []);
 
   return (
@@ -59,7 +57,7 @@ const List = () => {
         {list?.length > 0 ? (
           list.map((item, index) => (
             <div key={index} className="list-table-format">
-              <img src={`${API_BASE}/images/${item.image}`} alt={item.name} />
+              <img src={item.image && item.image.startsWith("http") ? item.image : API_BASE + "/images/" + item.image} alt={item.name} />
               <p>{item.name}</p>
               <p>{item.category}</p>
               <p>BDT {item.price}</p>
@@ -72,7 +70,7 @@ const List = () => {
             </div>
           ))
         ) : (
-          <p>No items found.</p> // Show this if list is empty
+          <p>No items found.</p>
         )}
       </div>
     </div>
