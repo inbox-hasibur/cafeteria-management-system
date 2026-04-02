@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import './List.css';
-import axios from 'axios';
-import { toast } from 'react-toastify';
+import React, { useEffect, useState } from "react";
+import "./List.css";
+import { toast } from "react-toastify";
+import api from "../../utils/api";
+import { API_BASE } from "../../utils/config";
 
 const List = () => {
-  const url = "http://localhost:4000"; // Make sure URL is correct
   const [list, setList] = useState([]);
 
   const fetchList = async () => {
     try {
-      const response = await axios.get(`${url}/api/food/list`);
+      const response = await api.get(`/api/food/list`);
       console.log("Fetched List Data:", response.data); // Debugging response
 
       if (response.data.success) {
-        setList(response.data.data); // Update the state with fetched data
+        setList(response.data.food); // Update the state with fetched data
       } else {
         toast.error("Error fetching list");
       }
@@ -25,7 +25,9 @@ const List = () => {
 
   const removeFood = async (foodId) => {
     try {
-      const response = await axios.post(`${url}/api/food/remove`, { id: foodId });
+      const response = await api.post(`/api/food/remove`, {
+        id: foodId,
+      });
       await fetchList(); // Refetch the list after removal
 
       if (response.data.success) {
@@ -33,7 +35,7 @@ const List = () => {
       } else {
         toast.error("Error removing food");
       }
-    } catch (err) {
+    } catch {
       toast.error("Error removing food");
     }
   };
@@ -54,14 +56,17 @@ const List = () => {
           <b>Action</b>
         </div>
 
-        {list.length > 0 ? (
+        {list?.length > 0 ? (
           list.map((item, index) => (
             <div key={index} className="list-table-format">
-              <img src={`${url}/images/${item.image}`} alt={item.name} />
+              <img src={`${API_BASE}/images/${item.image}`} alt={item.name} />
               <p>{item.name}</p>
               <p>{item.category}</p>
-              <p>${item.price}</p>
-              <button onClick={() => removeFood(item._id)} className="delete-button">
+              <p>BDT {item.price}</p>
+              <button
+                onClick={() => removeFood(item._id)}
+                className="delete-button"
+              >
                 Delete
               </button>
             </div>

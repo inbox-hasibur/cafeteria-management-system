@@ -1,32 +1,32 @@
-import React, { use, useContext } from 'react'
-import './Verify.css'
-import { useSearchParams } from 'react-router-dom'
+import { useEffect } from "react";
+import api from "../../utils/api";
+import "./Verify.css";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const Verify = () => {
-  
-    const [searchParams, setSearchParams] = useSearchParams();
-    const success = searchParams.get("success")
-    const orderId = searchParams.get("orderId")
-    const {url} = useContext(StoreContext);
-    const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const success = searchParams.get("success");
+  const orderId = searchParams.get("orderId");
+  const navigate = useNavigate();
 
-    const verifyPayment = async () => {
-        const response = await axios.post(url+"/api/orders/verify", {success,orderId});
-        if (response.data.success) {
-            navigate("/myorders");
-        }
-        else { navigate("/"); }
+  const verifyPayment = async () => {
+    const response = await api.post("/api/orders/verify", { success, orderId });
+    if (response.data.success) {
+      navigate("/myorders");
+    } else {
+      navigate("/");
     }
+  };
 
-    useEffect(() => {
-        verifyPayment()
-    }, [])
+  useEffect(() => {
+    verifyPayment();
+  }, []);
 
-    return (
-    <div className='verify'>
+  return (
+    <div className="verify">
       <div className="spinner"></div>
     </div>
-  )
-}
+  );
+};
 
 export default Verify;

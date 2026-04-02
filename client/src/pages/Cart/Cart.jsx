@@ -1,16 +1,17 @@
-import React, { useContext } from 'react'
-import './Cart.css'
-import { StoreContext } from '../../context/StoreContext'
-import { useNavigate } from 'react-router-dom';
+import React, { useContext } from "react";
+import "./Cart.css";
+import { StoreContext } from "../../context/StoreContext";
+import { useNavigate } from "react-router-dom";
+import { API_BASE } from "../../utils/config";
 
 const Cart = () => {
-  
-  const { cartItems, food_list, removeFromCart, getTotalCartAmount, url } = useContext(StoreContext);
-  
+  const { cartItems, food_list, removeFromCart, getTotalCartAmount } =
+    useContext(StoreContext);
+
   const navigate = useNavigate();
 
   return (
-    <div className='cart'>
+    <div className="cart">
       <div className="cart-items">
         <div className="cart-items-title">
           <p>Items</p>
@@ -20,28 +21,29 @@ const Cart = () => {
           <p>Total</p>
           <p>Remove</p>
         </div>
-        <br /> 
+        <br />
         <hr />
-        {food_list.map((item, index) => {
-          if (cartItems[item._id]>0)
-          {
+        {food_list.map((item) => {
+          if (cartItems[item._id] > 0) {
             return (
-              <div>
+              <div key={item._id}>
                 <div className="cart-items-title cart-items-item">
-                  <img src={url+"/images/"+item.image} alt="" />
+                  <img src={API_BASE + "/images/" + item.image} alt="" />
                   <p>{item.name}</p>
-                  <p>BDT  {item.price}</p>
+                  <p>BDT {item.price}</p>
                   <p>{cartItems[item._id]}</p>
-                  <p>BDT  {item.price * cartItems[item._id]}</p>
-                  <p onClick={()=>removeFromCart(item._id)} className='cross'>x</p>
-                </div><hr />
+                  <p>BDT {item.price * cartItems[item._id]}</p>
+                  <p onClick={() => removeFromCart(item._id)} className="cross">
+                    x
+                  </p>
+                </div>
+                <hr />
               </div>
-            )
+            );
           }
-
         })}
       </div>
-      <div className='cart-bottom'>
+      <div className="cart-bottom">
         <div className="cart-total">
           <h2>Cart Total</h2>
           <div>
@@ -57,17 +59,19 @@ const Cart = () => {
             <hr />
             <div className="cart-total-details">
               <b>Total</b>
-              <b>BDT {getTotalCartAmount()+70}</b>
+              <b>BDT {getTotalCartAmount() + 70}</b>
             </div>
           </div>
           <div className="cart-buttons">
-            <button onClick={()=>navigate('/order')}>PROCEED TO CHECKOUT</button>
+            <button onClick={() => navigate("/order")}>
+              PROCEED TO CHECKOUT
+            </button>
             <button className="submit-btn">SUBMIT ORDER</button>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Cart
+export default Cart;

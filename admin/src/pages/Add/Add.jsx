@@ -41,7 +41,6 @@ const Add = ({ url }) => {
     formData.append("name", data.name);
     formData.append("description", data.description);
     formData.append("price", Number(data.price)); // Ensure price is a number
-    formData.append("category", data.category);
     formData.append("image", data.image); // Appending the image file
 
     try {
@@ -53,7 +52,6 @@ const Add = ({ url }) => {
           name: "",
           description: "",
           price: "",
-          category: "Salad",
           image: null, // Reset image state
         });
         toast.success(response.data.message);
@@ -109,20 +107,6 @@ const Add = ({ url }) => {
         </div>
 
         <div className="add-category-price">
-          <div className="add-category flex-col">
-            <p>Product Category</p>
-            <select onChange={onChangeHandler} name="category">
-              <option value='Salad'>Salad</option>
-              <option value='Rolls'>Rolls</option>
-              <option value='Deserts'>Deserts</option>
-              <option value='Sandwich'>Sandwich</option>
-              <option value='Cake'>Cake</option>
-              <option value='Pure Veg'>Pure Veg</option>
-              <option value='Pasta'>Pasta</option>
-              <option value='Noodles'>Noodles</option>
-            </select>
-          </div>
-
           <div className="add-price flex-col">
             <p>Product Price</p>
             <input
@@ -130,7 +114,7 @@ const Add = ({ url }) => {
               value={data.price}
               type="number"
               name="price"
-              placeholder="$20"
+              placeholder="BDT 20"
             />
           </div>
         </div>
