@@ -19,6 +19,7 @@
   --hover-bg: #e8e8e8;
   --icon-invert: 0;
   --icon-filter: none;
+  --icon-filter-monochrome: brightness(0);
   --category-text: #555555;
   --star-color: #f5a623;
 }
@@ -41,6 +42,7 @@
   --hover-bg: #333333;
   --icon-invert: 1;
   --icon-filter: brightness(0) invert(1);
+  --icon-filter-monochrome: brightness(0) invert(1);
   --category-text: #e0e0e0;
   --star-color: #f5c842;
 }
@@ -72,4 +74,20 @@ a {
 /* Global Transitions for smooth dark mode swapping */
 div, p, h1, h2, h3, span, button, input {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+@media (max-width: 1050px) {
+  .app {
+    width: 90%;
+  }
+}
+@media (max-width: 768px) {
+  .app {
+    width: 95%;
+  }
+}
+@media (max-width: 480px) {
+  .app {
+    width: 98%;
+  }
 }

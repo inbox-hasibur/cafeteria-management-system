@@ -35,14 +35,14 @@
     gap: 15px;
 }
 
-.footer-social-icons img {
+.footer-social-icons svg {
     width: 25px;
     cursor: pointer;
     transition: transform 0.3s ease;
-    filter: var(--icon-filter);
+    filter: var(--icon-filter-monochrome);
 }
 
-.footer-social-icons img:hover {
+.footer-social-icons svg:hover {
     transform: scale(1.1);
 }
 

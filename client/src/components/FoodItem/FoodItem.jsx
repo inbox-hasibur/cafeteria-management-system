@@ -67,9 +67,11 @@ const FoodItem = ({ id, name, price, description, image, rating = 0, totalReview
         <div className="food-item-name">
           <p>{name}</p>
         </div>
-        <StarRating rating={rating} totalReviews={totalReviews} />
         <p className="food-item-desc">{description}</p>
-        <p className="food-item-price">BDT {price}</p>
+        <div className="food-item-bottom">
+          <p className="food-item-price">BDT {price}</p>
+          <StarRating rating={rating} totalReviews={totalReviews} />
+        </div>
       </div>
     </div>
   );

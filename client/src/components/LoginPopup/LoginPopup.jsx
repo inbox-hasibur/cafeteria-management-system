@@ -11,6 +11,7 @@ const LoginPopup = ({ setShowLogin }) => {
   const [currentState, setCurrentState] = useState("Login");
   const [data, setData] = useState({ name: "", email: "", password: "" });
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const isAdminMode = currentState === "Admin Login";
 
@@ -87,14 +88,22 @@ const LoginPopup = ({ setShowLogin }) => {
             value={data.email}
             onChange={onChangeHandler}
           />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            required
-            value={data.password}
-            onChange={onChangeHandler}
-          />
+          <div className="password-input-container">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              required
+              value={data.password}
+              onChange={onChangeHandler}
+            />
+            <span
+              className="password-toggle-icon"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? "👁️" : "👁️‍🗨️"}
+            </span>
+          </div>
         </div>
 
         {isAdminMode && (

@@ -74,7 +74,7 @@ const PlaceOrder = () => {
     try {
       const response = await api.post("/api/orders/place", orderData);
       if (response.data.success) {
-        if (paymentMethod === "COD") {
+        if (paymentMethod === "COD" || paymentMethod === "bKash" || paymentMethod === "Nagad") {
           // Clear the React cart state immediately
           await clearCart();
           toast.success(response.data.message || "Order placed successfully!");
@@ -217,7 +217,35 @@ const PlaceOrder = () => {
               />
               <label htmlFor="cod">
                 <span className="payment-icon">💵</span>
-                Cash on Delivery (COD)
+                Cash on Delivery
+              </label>
+            </div>
+            <div className="payment-option">
+              <input
+                type="radio"
+                id="bkash"
+                name="payment"
+                value="bKash"
+                checked={paymentMethod === "bKash"}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+              />
+              <label htmlFor="bkash">
+                <span className="payment-icon">🦅</span>
+                bKash
+              </label>
+            </div>
+            <div className="payment-option">
+              <input
+                type="radio"
+                id="nagad"
+                name="payment"
+                value="Nagad"
+                checked={paymentMethod === "Nagad"}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+              />
+              <label htmlFor="nagad">
+                <span className="payment-icon">📱</span>
+                Nagad
               </label>
             </div>
             <div className="payment-option">
@@ -231,7 +259,7 @@ const PlaceOrder = () => {
               />
               <label htmlFor="stripe">
                 <span className="payment-icon">💳</span>
-                Credit / Debit Card (Stripe)
+                Stripe (Card)
               </label>
             </div>
           </div>

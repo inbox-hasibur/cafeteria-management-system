@@ -39,14 +39,21 @@ const placeOrder = async (req, res) => {
     // 2. Clear user cart in DB
     await userModel.findByIdAndUpdate(req.userId, { cartData: {} });
 
-    // 3. Handle Cash on Delivery — mark payment as "pending on delivery"
-    if (paymentMethod === "COD" || !stripe) {
-      // For COD, payment happens on delivery so we keep payment: false
+    // 3. Handle Cash on Delivery and other offline methods — mark payment as "pending on delivery"
+    if (paymentMethod === "COD" || paymentMethod === "bKash" || paymentMethod === "Nagad") {
+      // For these methods, payment happens directly so we keep payment: false
       // but return success so frontend can navigate to MyOrders
       return res.json({
         success: true,
-        message: "Order placed successfully! Pay on delivery.",
+        message: `Order placed successfully! Please pay via ${paymentMethod}.`,
         orderId: newOrder._id,
+      });
+    }
+
+    if (!stripe) {
+      return res.json({
+        success: false,
+        message: "Stripe is not configured. Please use another payment method."
       });
     }
 
