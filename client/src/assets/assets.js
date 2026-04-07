@@ -52,34 +52,38 @@ export const assets = {
 export const menu_list = [
     {
         menu_name: "Biryani",
-        menu_image: menu_1
+        menu_icon: "🍛"
     },
     {
         menu_name: "Rice",
-        menu_image: menu_2
+        menu_icon: "🍚"
     },
     {
         menu_name: "Curry",
-        menu_image: menu_3
+        menu_icon: "🍲"
     },
     {
         menu_name: "Fish",
-        menu_image: menu_4
+        menu_icon: "🐟"
     },
     {
         menu_name: "Shawarma",
-        menu_image: menu_5
+        menu_icon: "🌯"
     },
     {
         menu_name: "Sandwich",
-        menu_image: menu_6
+        menu_icon: "🥪"
     },
     {
         menu_name: "Special",
-        menu_image: menu_7
+        menu_icon: "✨"
     },
     {
         menu_name: "Vegetable",
-        menu_image: menu_8
+        menu_icon: "🥦"
+    },
+    {
+        menu_name: "Beverage",
+        menu_icon: "🥤"
     }
 ]

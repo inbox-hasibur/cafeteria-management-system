@@ -1,12 +1,12 @@
-.header{
+.header {
     height: 34vw;
-    margin:20px auto;
+    margin: 20px auto;
     background: url('/header_img.png') no-repeat;
     background-size: contain;
     position: relative;
 }
 
-.header-contents{
+.header-contents {
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -14,26 +14,35 @@
     gap: 1.5vw;
     max-width: 50%;
     bottom: 15%;
-    left:6vw;
+    left: 6vw;
 }
 
-.header-contents h2{
-    font-weight: 500;
+.header-contents h2 {
+    font-weight: 600;
     color: white;
-    font-size: max(4.5vw,22px);
+    font-size: max(4vw, 22px);
+    text-shadow: 0px 2px 4px rgba(0,0,0,0.5); /* Helps legibility if background changes */
 }
 
-.header-contents p{
+.header-contents p {
     color: white;
-    font-size: 1vw;
+    font-size: max(1.2vw, 12px);
+    text-shadow: 0px 1px 3px rgba(0,0,0,0.5);
 }
 
-.header-contents button{
+.header-contents button {
     border: none;
-    color: #747474;
-    font-size: 500;
+    color: var(--text-color, #747474);
+    font-weight: 500;
     padding: 1vw 2.3vw;
-    background-color: white;
-    font-size: max(1vw,13px);
+    background-color: var(--bg-color, white);
+    font-size: max(1vw, 13px);
     border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.header-contents button:hover {
+    transform: scale(1.05);
+    background-color: var(--card-bg, #f0f0f0);
 }

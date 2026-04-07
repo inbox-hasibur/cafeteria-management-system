@@ -8,7 +8,7 @@ function Footer() {
             <div className='footer-content'>
                 <div className="footer-content-left">
                     <img src={assets.logo} alt="" />
-                    <p>Fast food cafeteria and restaurant <br />service inside the IUBAT Campus <br />near Kamarpara, Uttara, Dhaka.</p>
+                    <p>Your premium cafeteria inside the IUBAT Campus. <br />Providing fast, fresh, and delicious meals <br />for our students and faculty every day.</p>
                     <div className="footer-social-icons">
                         <img src={assets.facebook_icon} alt="" />
                         <img src={assets.twitter_icon} alt="" />
@@ -24,9 +24,9 @@ function Footer() {
                 </div>
                 <div className="footer-content-right">
                     <h3>Contact</h3>
-                    <p>Phone: +880 1234-567890</p>
-                    <p>Email: info@lemonlime.com</p>
-                    <p>Address: Dhaka, Bangladesh</p>
+                    <p>Phone: +880 1711-IUBAT-FOOD</p>
+                    <p>Email: cafeteria@iubat.edu</p>
+                    <p>Address: IUBAT, 4 Embankment Drive Road, Sector 10, Uttara, Dhaka</p>
                 </div>
             </div>
         </div>

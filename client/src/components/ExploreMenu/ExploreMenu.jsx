@@ -8,13 +8,22 @@ const ExploreMenu = () => {
 
     return (
         <div className='explore-menu' id='explore-menu'>
-            <h2>Explore our menu</h2>
-            <p className='explore-menu-text'>Choose from a diverse menu featuring a delectable array of dishes. Our mission is to satisfy your cravings and elevate your dining experience, one delicious meal at a time.</p>
             <div className="explore-menu-list">
+                <div 
+                    onClick={() => setCategory("All")} 
+                    className={`explore-menu-list-item ${category === "All" ? "active" : ""}`}
+                >
+                    <span className="menu-icon">🍽️</span>
+                    <p>All</p>
+                </div>
                 {menu_list.map((item, index) => {
                     return (
-                        <div onClick={() => setCategory(prev => prev === item.menu_name ? "All" : item.menu_name)} key={index} className='explore-menu-list-item'>
-                            <img className={category === item.menu_name ? "active" : ""} src={item.menu_image} alt="" />
+                        <div 
+                            onClick={() => setCategory(prev => prev === item.menu_name ? "All" : item.menu_name)} 
+                            key={index} 
+                            className={`explore-menu-list-item ${category === item.menu_name ? "active" : ""}`}
+                        >
+                            <span className="menu-icon">{item.menu_icon}</span>
                             <p>{item.menu_name}</p>
                         </div>
                     )

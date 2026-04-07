@@ -12,8 +12,8 @@ function Header() {
   return (
     <div className='header'>
       <div className="header-contents">
-        <h2>Order your <br />food here now </h2>
-        <p>choose from a diverse menu featuring a delectable <br />array of dishes crafted with the finest</p>
+        <h2>Welcome to IUBAT <br />Lemonlime Cafeteria</h2>
+        <p>Your favorite campus spot for fast food, delicious meals, and refreshing drinks. <br />Fuel up for your classes right here at IUBAT.</p>
         <button onClick={scrollToMenu}>View Menu</button>
       </div>
     </div> 

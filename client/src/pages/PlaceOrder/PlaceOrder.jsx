@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./PlaceOrder.css";
 import { StoreContext } from "../../context/StoreContext";
 import api from "../../utils/api";
@@ -11,7 +11,7 @@ const PlaceOrder = () => {
     
   const navigate = useNavigate();
 
-  const [data, setData] = React.useState({
+  const [data, setData] = useState({
     firstName: "",
     lastName: "",
     email: "",
@@ -22,6 +22,8 @@ const PlaceOrder = () => {
     country: "",
     phone: "",
   });
+
+  const [paymentMethod, setPaymentMethod] = useState("COD"); // Default to COD
 
   useEffect(() => {
     if (!token) {
@@ -53,13 +55,19 @@ const PlaceOrder = () => {
       address: data,
       items: orderItems,
       amount: getTotalCartAmount() + 70,
+      paymentMethod: paymentMethod // Send chosen payment method
     };
 
     try {
       let response = await api.post("/api/orders/place", orderData);
       if (response.data.success) {
-        const { session_url } = response.data;
-        window.location.replace(session_url);
+        const { session_url, message } = response.data;
+        if (paymentMethod === "COD") {
+          toast.success(message || "Order placed successfully!");
+          navigate("/myorders"); // Jump straight to orders page for COD
+        } else {
+          window.location.replace(session_url); // redirects to stripe
+        }
       } else {
         toast.error(response.data.message || "Error placing order");
       }
@@ -170,8 +178,35 @@ const PlaceOrder = () => {
               <b>BDT {getTotalCartAmount() + 70}</b>
             </div>
           </div>
+          
+          <div className="payment-options">
+             <h2>Payment Method</h2>
+             <div className="payment-option">
+               <input 
+                 type="radio" 
+                 id="cod" 
+                 name="payment" 
+                 value="COD" 
+                 checked={paymentMethod === "COD"} 
+                 onChange={(e) => setPaymentMethod(e.target.value)}
+               />
+               <label htmlFor="cod">Cash on Delivery (COD)</label>
+             </div>
+             <div className="payment-option">
+               <input 
+                 type="radio" 
+                 id="stripe" 
+                 name="payment" 
+                 value="Stripe" 
+                 checked={paymentMethod === "Stripe"} 
+                 onChange={(e) => setPaymentMethod(e.target.value)}
+               />
+               <label htmlFor="stripe">Credit/Debit Card (Stripe)</label>
+             </div>
+          </div>
+
           <div className="cart-buttons">
-            <button type="submit">PROCEED TO PAYMENT</button>
+            <button type="submit">PLACE ORDER</button>
           </div>
         </div>
       </div>

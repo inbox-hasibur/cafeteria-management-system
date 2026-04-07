@@ -11,27 +11,35 @@ const stripe = process.env.STRIPE_SECRET_KEY
 
 // Place order from frontend
 const placeOrder = async (req, res) => {
-  if (!stripe) {
-    return res.json({
-      success: false,
-      message: "Payment service is not configured",
-    });
-  }
-
-  const frontend_url =
-    process.env.STRIPE_FRONTEND_URL || "http://localhost:5173";
+  const { items, amount, address, paymentMethod = "COD" } = req.body;
+  const frontend_url = process.env.STRIPE_FRONTEND_URL || "http://localhost:5173";
 
   try {
+    // 1. Create order in Database (payment status is false initially)
     const newOrder = new orderModel({
       userId: req.userId,
-      items: req.body.items,
-      amount: req.body.amount,
-      address: req.body.address,
+      items: items,
+      amount: amount,
+      address: address,
+      payment: paymentMethod === "COD" // If COD, we assume payment will happen later, but order placement is "successful"
     });
+    
     await newOrder.save();
+    
+    // Clear user cart
     await userModel.findByIdAndUpdate(req.userId, { cartData: {} });
 
-    const line_items = req.body.items.map((item) => ({
+    // 2. Handle Cash on Delivery (COD) instantly
+    if (paymentMethod === "COD" || !stripe) {
+      return res.json({ 
+        success: true, 
+        message: "Order placed successfully! Please pay on delivery.",
+        session_url: `${frontend_url}/verify?success=true&orderId=${newOrder._id}&method=cod`
+      });
+    }
+
+    // 3. Handle Stripe Payment (if selected & available)
+    const line_items = items.map((item) => ({
       price_data: {
         currency: "bdt",
         product_data: {

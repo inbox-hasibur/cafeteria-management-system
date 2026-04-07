@@ -10,6 +10,20 @@ const StoreContextProvider = (props) => {
   const [category, setCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
+  
+  // Theme State
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem("theme") || "light";
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === "light" ? "dark" : "light");
+  };
 
   const addToCart = async (itemId) => {
     if (!cartItems[itemId]) {
@@ -107,7 +121,9 @@ const StoreContextProvider = (props) => {
     setCategory,
     searchQuery,
     setSearchQuery,
-    loading
+    loading,
+    theme,
+    toggleTheme
   };
 
   return (

@@ -3,11 +3,12 @@
     display: flex;
     justify-content: space-between;
     gap: 50px;
-    background-color: #fcfcfc;
-    border: 1px solid #e0e0e0;
+    background-color: var(--card-bg, #fcfcfc);
+    border: 1px solid var(--border-color, #e0e0e0);
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.05);
+    box-shadow: 0px 4px 15px var(--shadow-color, rgba(0, 0, 0, 0.05));
+    transition: all 0.3s ease;
 }
 
 .find-us-left {
@@ -20,7 +21,7 @@
 
 .find-us-left h2 {
     font-size: 32px;
-    color: #333;
+    color: var(--header-text, #333);
     margin-bottom: 25px;
     position: relative;
 }
@@ -30,7 +31,7 @@
     position: absolute;
     width: 60px;
     height: 4px;
-    background-color: #7ebf08;
+    background-color: var(--primary-color, #7ebf08);
     bottom: -10px;
     left: 0;
     border-radius: 2px;
@@ -40,19 +41,19 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
-    color: #666;
+    color: var(--text-color-muted, #666);
     font-size: 16px;
     margin-bottom: 30px;
 }
 
 .find-us-details b {
-    color: #444;
+    color: var(--text-color, #444);
 }
 
 .directions-btn {
     align-self: flex-start;
     padding: 12px 25px;
-    background-color: #7ebf08;
+    background-color: var(--primary-color, #7ebf08);
     color: white;
     font-weight: 500;
     border: none;
@@ -63,7 +64,8 @@
 }
 
 .directions-btn:hover {
-    background-color: #6bae06;
+    background-color: var(--primary-color-hover, #6bae06);
+    transform: scale(1.05); /* Slight micro-animation */
 }
 
 .find-us-right {

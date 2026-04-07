@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 const Navbar = ({ setShowLogin }) => {
   const [menu, setMenu] = useState("home");
-  const { token, setToken, cartItems } = useContext(StoreContext);
+  const { token, setToken, cartItems, theme, toggleTheme } = useContext(StoreContext);
   const navigate = useNavigate();
 
   const logout = () => {
@@ -65,7 +65,15 @@ const Navbar = ({ setShowLogin }) => {
         </a>
       </ul>
       <div className="navbar-right">
-        {/* <img src={assets.search_icon} alt="Search" /> */}
+        {/* Theme Toggle Button */}
+        <button 
+          onClick={toggleTheme} 
+          className="theme-toggle" 
+          aria-label="Toggle Dark Mode"
+        >
+          {theme === "light" ? "🌙" : "☀️"}
+        </button>
+
         <div className="navbar-search-icon">
           <Link to="/cart">
             <img src={assets.basket_icon} alt="Cart" />
@@ -73,7 +81,7 @@ const Navbar = ({ setShowLogin }) => {
           {getTotalQuantity() > 0 && <div className="dot"></div>}
         </div>
         {!token ? (
-          <button onClick={() => setShowLogin(true)}>Sign In</button>
+          <button className="signin-btn" onClick={() => setShowLogin(true)}>Sign In</button>
         ) : (
           <div className="navbar-profile">
             <img src={assets.profile_icon} alt="Profile" />
