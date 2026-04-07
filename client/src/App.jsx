@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Route, Routes, Navigate, Outlet, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar/Navbar'
 import Footer from './components/Footer/Footer'
@@ -46,10 +46,31 @@ const AdminLayout = () => {
 
 const App = () => {
   const [showLogin, setShowLogin] = useState(false)
+  const [showTopBtn, setShowTopBtn] = useState(false)
   const location = useLocation()
   
   // Protect /admin routes using localStorage flag we will set on login
   const isAdmin = localStorage.getItem("isAdmin") === "true";
+
+  // Watch scroll for back to top button
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 400) {
+        setShowTopBtn(true);
+      } else {
+        setShowTopBtn(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const goToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
 
   // Redirect non-admins away from admin portal
   if (location.pathname.startsWith('/admin') && !isAdmin && location.pathname !== '/admin') {
@@ -84,6 +105,38 @@ const App = () => {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
+
+      {/* Back to Top Button */}
+      {showTopBtn && (
+        <button 
+          onClick={goToTop} 
+          style={{
+            position: 'fixed',
+            bottom: '40px',
+            right: '40px',
+            zIndex: 99,
+            height: '50px',
+            width: '50px',
+            borderRadius: '50%',
+            backgroundColor: 'var(--primary-color)',
+            color: 'white',
+            border: 'none',
+            outline: 'none',
+            cursor: 'pointer',
+            boxShadow: '0 4px 10px rgba(0,0,0,0.3)',
+            fontSize: '24px',
+            lineHeight: '50px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            transition: 'transform 0.3s ease'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+          onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+        >
+          ↑
+        </button>
+      )}
     </>
   )
 }

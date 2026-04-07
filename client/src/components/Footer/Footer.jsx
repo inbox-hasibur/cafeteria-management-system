@@ -24,7 +24,7 @@ function Footer() {
                 </div>
                 <div className="footer-content-right">
                     <h3>Contact</h3>
-                    <p>Phone: +880 1711-IUBAT-FOOD</p>
+                    <p>Phone: 01882082502</p>
                     <p>Email: cafeteria@iubat.edu</p>
                     <p>Address: IUBAT, 4 Embankment Drive Road, Sector 10, Uttara, Dhaka</p>
                 </div>

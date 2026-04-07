@@ -9,7 +9,7 @@ const FindUs = () => {
                 <div className="find-us-details">
                     <p><b>Location:</b> IUBAT Campus, Kamarpara, Uttara, Dhaka</p>
                     <p><b>Hours:</b> Sat - Thu: 8:00 AM - 6:00 PM</p>
-                    <p><b>Phone:</b> +880 1711-IUBAT-FOOD</p>
+                    <p><b>Phone:</b> 01882082502</p>
                     <p><b>Email:</b> cafeteria@iubat.edu</p>
                 </div>
                 <button className="directions-btn">Get Directions</button>
