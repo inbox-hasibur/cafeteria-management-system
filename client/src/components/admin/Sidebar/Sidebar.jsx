@@ -7,16 +7,16 @@ const Sidebar = () => {
   return (
     <div className='sidebar'>
       <div className="sidebar-options">
-        <NavLink to="/admin/add" className="sidebar-option">
-          <img src={assets.add_icon} alt="" />
+        <NavLink to="/admin/add" className={({ isActive }) => `sidebar-option ${isActive ? 'active' : ''}`}>
+          <img src={assets.add_icon_white} alt="" />
           <p>Add Items</p>
         </NavLink>
-        <NavLink to="/admin/list" className="sidebar-option">
-          <img src={assets.order_icon} alt="" />
+        <NavLink to="/admin/list" className={({ isActive }) => `sidebar-option ${isActive ? 'active' : ''}`}>
+          <img src={assets.parcel_icon} alt="" />
           <p>List Items</p>
         </NavLink>
-        <NavLink to="/admin/orders" className="sidebar-option">
-          <img src={assets.order_icon} alt="" />
+        <NavLink to="/admin/orders" className={({ isActive }) => `sidebar-option ${isActive ? 'active' : ''}`}>
+          <img src={assets.bag_icon} alt="" />
           <p>Orders</p>
         </NavLink>
       </div>

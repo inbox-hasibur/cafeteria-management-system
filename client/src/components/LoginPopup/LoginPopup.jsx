@@ -12,6 +12,8 @@ const LoginPopup = ({ setShowLogin }) => {
   const [data, setData] = useState({ name: "", email: "", password: "" });
   const [loading, setLoading] = useState(false);
 
+  const isAdminMode = currentState === "Admin Login";
+
   const onChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -21,7 +23,8 @@ const LoginPopup = ({ setShowLogin }) => {
   const onLogin = async (event) => {
     event.preventDefault();
     setLoading(true);
-    let endpoint = currentState === "Login" || currentState === "Admin Login" ? "/api/user/login" : "/api/user/register";
+    const endpoint =
+      currentState === "Sign Up" ? "/api/user/register" : "/api/user/login";
 
     try {
       const response = await api.post(endpoint, data);
@@ -29,7 +32,7 @@ const LoginPopup = ({ setShowLogin }) => {
       if (response.data.success) {
         setToken(response.data.token);
         localStorage.setItem("token", response.data.token);
-        
+
         // Store Admin status and redirect
         if (response.data.user && response.data.user.role === "admin") {
           localStorage.setItem("isAdmin", "true");
@@ -39,12 +42,16 @@ const LoginPopup = ({ setShowLogin }) => {
         }
 
         setShowLogin(false);
-        toast.success(`Successfully ${currentState === "Sign Up" ? "registered" : "logged in"}!`);
+        toast.success(
+          `Successfully ${currentState === "Sign Up" ? "registered" : "logged in"}!`
+        );
       } else {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error. Please try again.");
+      toast.error(
+        error.response?.data?.message || "Server error. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -62,22 +69,20 @@ const LoginPopup = ({ setShowLogin }) => {
           />
         </div>
         <div className="login-popup-inputs">
-          {currentState === "Login" ? (
-            <></>
-          ) : (
+          {currentState === "Sign Up" && (
             <input
               type="text"
               name="name"
-              placeholder="Name"
+              placeholder="Your Name"
               required
               value={data.name}
               onChange={onChangeHandler}
             />
           )}
           <input
-            type="email"
+            type={isAdminMode ? "text" : "email"}
             name="email"
-            placeholder="Email"
+            placeholder={isAdminMode ? "Admin Username" : "Email"}
             required
             value={data.email}
             onChange={onChangeHandler}
@@ -91,20 +96,46 @@ const LoginPopup = ({ setShowLogin }) => {
             onChange={onChangeHandler}
           />
         </div>
+
+        {isAdminMode && (
+          <p className="admin-hint">
+            💡 Use username: <strong>admin</strong> / password: <strong>admin123</strong>
+          </p>
+        )}
+
         <button type="submit" disabled={loading}>
-          {loading ? "Please wait..." : (currentState === "Sign Up" ? "Create account" : "Login")}
+          {loading
+            ? "Please wait..."
+            : currentState === "Sign Up"
+            ? "Create Account"
+            : "Login"}
         </button>
+
         {currentState === "Login" && (
           <>
-            <p>Don't have an account? <span onClick={() => setCurrentState("Sign Up")}>Sign Up</span></p>
-            <p>Are you an Admin? <span onClick={() => setCurrentState("Admin Login")}>Admin Login</span></p>
+            <p>
+              Don't have an account?{" "}
+              <span onClick={() => setCurrentState("Sign Up")}>Sign Up</span>
+            </p>
+            <p>
+              Are you an Admin?{" "}
+              <span onClick={() => setCurrentState("Admin Login")}>
+                Admin Login
+              </span>
+            </p>
           </>
         )}
         {currentState === "Sign Up" && (
-          <p>Already have an account? <span onClick={() => setCurrentState("Login")}>Login</span></p>
+          <p>
+            Already have an account?{" "}
+            <span onClick={() => setCurrentState("Login")}>Login here</span>
+          </p>
         )}
         {currentState === "Admin Login" && (
-          <p>Back to Customer? <span onClick={() => setCurrentState("Login")}>Login</span></p>
+          <p>
+            Back to Customer?{" "}
+            <span onClick={() => setCurrentState("Login")}>Login</span>
+          </p>
         )}
       </form>
     </div>
@@ -112,3 +143,4 @@ const LoginPopup = ({ setShowLogin }) => {
 };
 
 export default LoginPopup;
+

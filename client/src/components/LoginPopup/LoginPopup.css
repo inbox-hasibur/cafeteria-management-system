@@ -63,3 +63,18 @@
     font-weight: 500;
     cursor: pointer;
 }
+
+.admin-hint {
+    background: #f0f9e8;
+    border: 1px solid #7ebf08;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: #4a7a00;
+    margin-top: -10px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
