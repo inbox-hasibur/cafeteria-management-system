@@ -6,9 +6,9 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const PlaceOrder = () => {
-  const { getTotalCartAmount, token, food_list, cartItems } =
+  const { getTotalCartAmount, token, food_list, cartItems, clearCart } =
     useContext(StoreContext);
-    
+
   const navigate = useNavigate();
 
   const [data, setData] = useState({
@@ -19,11 +19,12 @@ const PlaceOrder = () => {
     city: "",
     division: "",
     zipCode: "",
-    country: "",
+    country: "Bangladesh",
     phone: "",
   });
 
-  const [paymentMethod, setPaymentMethod] = useState("COD"); // Default to COD
+  const [paymentMethod, setPaymentMethod] = useState("COD");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (!token) {
@@ -42,37 +43,59 @@ const PlaceOrder = () => {
 
   const placeOrder = async (event) => {
     event.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
     let orderItems = [];
-    food_list.map((item) => {
+    food_list.forEach((item) => {
       if (cartItems[item._id] > 0) {
-        let itemInfo = item;
-        itemInfo["quantity"] = cartItems[item._id];
-        orderItems.push(itemInfo);
+        orderItems.push({
+          foodId: item._id,
+          name: item.name,
+          price: item.price,
+          quantity: cartItems[item._id],
+        });
       }
     });
+
+    if (orderItems.length === 0) {
+      toast.error("Your cart is empty!");
+      setIsSubmitting(false);
+      return;
+    }
 
     let orderData = {
       address: data,
       items: orderItems,
       amount: getTotalCartAmount() + 70,
-      paymentMethod: paymentMethod // Send chosen payment method
+      paymentMethod: paymentMethod,
     };
 
     try {
-      let response = await api.post("/api/orders/place", orderData);
+      const response = await api.post("/api/orders/place", orderData);
       if (response.data.success) {
-        const { session_url, message } = response.data;
         if (paymentMethod === "COD") {
-          toast.success(message || "Order placed successfully!");
-          navigate("/myorders"); // Jump straight to orders page for COD
+          // Clear the React cart state immediately
+          await clearCart();
+          toast.success(response.data.message || "Order placed successfully!");
+          navigate("/myorders");
         } else {
-          window.location.replace(session_url); // redirects to stripe
+          // Stripe — redirect to payment page
+          if (response.data.session_url) {
+            window.location.replace(response.data.session_url);
+          } else {
+            toast.error("Could not initiate payment. Please try again.");
+          }
         }
       } else {
         toast.error(response.data.message || "Error placing order");
       }
     } catch (error) {
-      toast.error("Server error. Please try again later.");
+      toast.error(
+        error.response?.data?.message || "Server error. Please try again later."
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -112,7 +135,7 @@ const PlaceOrder = () => {
           onChange={onChangeHandler}
           value={data.street}
           type="text"
-          placeholder="Street"
+          placeholder="Street / Hall / Dormitory"
         />
         <div className="multi-fields">
           <input
@@ -139,7 +162,7 @@ const PlaceOrder = () => {
             onChange={onChangeHandler}
             value={data.zipCode}
             type="text"
-            placeholder="Zip code"
+            placeholder="Zip Code"
           />
           <input
             required
@@ -155,13 +178,15 @@ const PlaceOrder = () => {
           name="phone"
           onChange={onChangeHandler}
           value={data.phone}
-          type="text"
-          placeholder="Phone"
+          type="tel"
+          placeholder="Phone Number"
+          pattern="[0-9+\-\s]{7,15}"
         />
       </div>
+
       <div className="place-order-right">
         <div className="cart-total">
-          <h2>Cart Total</h2>
+          <h2>Order Summary</h2>
           <div>
             <div className="cart-total-details">
               <p>Subtotal</p>
@@ -178,35 +203,43 @@ const PlaceOrder = () => {
               <b>BDT {getTotalCartAmount() + 70}</b>
             </div>
           </div>
-          
+
           <div className="payment-options">
-             <h2>Payment Method</h2>
-             <div className="payment-option">
-               <input 
-                 type="radio" 
-                 id="cod" 
-                 name="payment" 
-                 value="COD" 
-                 checked={paymentMethod === "COD"} 
-                 onChange={(e) => setPaymentMethod(e.target.value)}
-               />
-               <label htmlFor="cod">Cash on Delivery (COD)</label>
-             </div>
-             <div className="payment-option">
-               <input 
-                 type="radio" 
-                 id="stripe" 
-                 name="payment" 
-                 value="Stripe" 
-                 checked={paymentMethod === "Stripe"} 
-                 onChange={(e) => setPaymentMethod(e.target.value)}
-               />
-               <label htmlFor="stripe">Credit/Debit Card (Stripe)</label>
-             </div>
+            <h3>Payment Method</h3>
+            <div className="payment-option">
+              <input
+                type="radio"
+                id="cod"
+                name="payment"
+                value="COD"
+                checked={paymentMethod === "COD"}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+              />
+              <label htmlFor="cod">
+                <span className="payment-icon">💵</span>
+                Cash on Delivery (COD)
+              </label>
+            </div>
+            <div className="payment-option">
+              <input
+                type="radio"
+                id="stripe"
+                name="payment"
+                value="Stripe"
+                checked={paymentMethod === "Stripe"}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+              />
+              <label htmlFor="stripe">
+                <span className="payment-icon">💳</span>
+                Credit / Debit Card (Stripe)
+              </label>
+            </div>
           </div>
 
           <div className="cart-buttons">
-            <button type="submit">PLACE ORDER</button>
+            <button type="submit" className="submit-btn" disabled={isSubmitting}>
+              {isSubmitting ? "Placing Order..." : "PLACE ORDER"}
+            </button>
           </div>
         </div>
       </div>

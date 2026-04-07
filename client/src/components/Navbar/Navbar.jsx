@@ -5,6 +5,27 @@ import { Link, useNavigate } from "react-router-dom";
 import { StoreContext } from "../../context/StoreContext";
 import { toast } from "react-toastify";
 
+// Monochromatic SVG icons — inherit currentColor for theme compatibility
+const MoonIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </svg>
+);
+
+const SunIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="5"/>
+    <line x1="12" y1="1" x2="12" y2="3"/>
+    <line x1="12" y1="21" x2="12" y2="23"/>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+    <line x1="1" y1="12" x2="3" y2="12"/>
+    <line x1="21" y1="12" x2="23" y2="12"/>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+  </svg>
+);
+
 const Navbar = ({ setShowLogin }) => {
   const [menu, setMenu] = useState("home");
   const { token, setToken, cartItems, theme, toggleTheme } = useContext(StoreContext);
@@ -15,6 +36,7 @@ const Navbar = ({ setShowLogin }) => {
     localStorage.removeItem("isAdmin");
     setToken("");
     navigate("/");
+    toast.success("Logged out successfully");
   };
 
   const scrollToSection = (e, id) => {
@@ -32,12 +54,12 @@ const Navbar = ({ setShowLogin }) => {
   return (
     <div className="navbar">
       <Link to="/">
-        <img src={assets.logo} alt="Logo" className="logo" />
+        <img src={assets.logo} alt="IUBAT Cafeteria" className="logo" />
       </Link>
       <ul className="navbar-menu">
         <Link
           to="/"
-          onClick={(e) => { setMenu("home"); window.scrollTo(0, 0); }}
+          onClick={() => { setMenu("home"); window.scrollTo(0, 0); }}
           className={menu === "home" ? "active" : ""}
         >
           Home
@@ -54,7 +76,7 @@ const Navbar = ({ setShowLogin }) => {
           onClick={(e) => { setMenu("find-us"); scrollToSection(e, "find-us"); }}
           className={menu === "find-us" ? "active" : ""}
         >
-          Find-us
+          Find Us
         </a>
         <a
           href="#footer"
@@ -65,21 +87,27 @@ const Navbar = ({ setShowLogin }) => {
         </a>
       </ul>
       <div className="navbar-right">
-        {/* Theme Toggle Button */}
-        <button 
-          onClick={toggleTheme} 
-          className="theme-toggle" 
-          aria-label="Toggle Dark Mode"
+        {/* Monochromatic Theme Toggle */}
+        <button
+          onClick={toggleTheme}
+          className="theme-toggle"
+          aria-label={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
+          title={theme === "light" ? "Dark Mode" : "Light Mode"}
         >
-          {theme === "light" ? "🌙" : "☀️"}
+          {theme === "light" ? <MoonIcon /> : <SunIcon />}
         </button>
 
         <div className="navbar-search-icon">
           <Link to="/cart">
             <img src={assets.basket_icon} alt="Cart" />
           </Link>
-          {getTotalQuantity() > 0 && <div className="dot"></div>}
+          {getTotalQuantity() > 0 && (
+            <div className="dot">
+              <span>{getTotalQuantity()}</span>
+            </div>
+          )}
         </div>
+
         {!token ? (
           <button className="signin-btn" onClick={() => setShowLogin(true)}>Sign In</button>
         ) : (
@@ -89,7 +117,7 @@ const Navbar = ({ setShowLogin }) => {
               <li>
                 <Link to="/myorders" style={{ display: "flex", gap: "10px" }}>
                   <img src={assets.bag_icon} alt="Orders" />
-                  <p>Orders</p>
+                  <p>My Orders</p>
                 </Link>
               </li>
               {localStorage.getItem("isAdmin") === "true" && (

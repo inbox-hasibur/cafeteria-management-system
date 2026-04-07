@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const orderItemSchema = new mongoose.Schema(
   {
+    foodId: { type: mongoose.Schema.Types.ObjectId, ref: "food" }, // optional ref for reviews
     name: { type: String, required: true },
     quantity: { type: Number, required: true, min: 1 },
     price: { type: Number, required: true, min: 0 },
@@ -30,6 +31,11 @@ const orderSchema = new mongoose.Schema(
     items: { type: [orderItemSchema], required: true },
     amount: { type: Number, required: true },
     address: { type: addressSchema, required: true },
+    paymentMethod: {
+      type: String,
+      default: "COD",
+      enum: ["COD", "Stripe"],
+    },
     status: {
       type: String,
       default: "Pending",

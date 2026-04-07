@@ -6,6 +6,7 @@ import cartRouter from "./routes/cartRoute.js";
 import foodRouter from "./routes/foodRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 import userRouter from "./routes/userRoute.js";
+import reviewRouter from "./routes/reviewRoute.js";
 
 const app = express();
 
@@ -59,7 +60,9 @@ app.use("/api/food", foodRouter);
 app.use("/api/user", userRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/orders", orderRouter);
+app.use("/api/review", reviewRouter);
 app.use("/images", express.static("uploads"));
+
 
 // ─── 404 Handler ─────────────────────────────────────────────────────────────
 app.use((req, res) => {

@@ -19,19 +19,20 @@ const FoodDisplay = () => {
 
   const filteredFoods = food_list.filter((item) => {
     const matchesCategory = category === "All" || category === item.category;
-    const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          item.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch =
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.description.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
   return (
     <div className="food-display" id="food-display">
       <div className="food-display-header">
-        <h2>Top dishes near you</h2>
+        <h2>Top Dishes Near You</h2>
         <div className="search-bar">
-          <input 
-            type="text" 
-            placeholder="Search for food..." 
+          <input
+            type="text"
+            placeholder="Search for food..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -47,14 +48,16 @@ const FoodDisplay = () => {
       ) : (
         <>
           <div className="food-display-list">
-            {filteredFoods.map((item, index) => (
-              <div key={index} className="fade-in">
+            {filteredFoods.map((item) => (
+              <div key={item._id} className="fade-in">
                 <FoodItem
                   id={item._id}
                   name={item.name}
                   description={item.description}
                   price={item.price}
                   image={item.image}
+                  rating={item.averageRating || 0}
+                  totalReviews={item.totalReviews || 0}
                 />
               </div>
             ))}
@@ -64,7 +67,10 @@ const FoodDisplay = () => {
             <div className="empty-state">
               <h3>No dishes match your search or category.</h3>
               <p>Try adjusting your filters or search query.</p>
-              <button className="reset-btn" onClick={() => { setSearchQuery(""); setCategory("All"); }}>
+              <button
+                className="reset-btn"
+                onClick={() => { setSearchQuery(""); setCategory("All"); }}
+              >
                 Reset Filters
               </button>
             </div>

@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useCallback } from "react";
 import api from "../utils/api";
 
 export const StoreContext = createContext(null);
@@ -10,7 +10,7 @@ const StoreContextProvider = (props) => {
   const [category, setCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
-  
+
   // Theme State
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem("theme") || "light";
@@ -50,12 +50,25 @@ const StoreContextProvider = (props) => {
       }
       return { ...prev, [itemId]: newCount };
     });
-    
+
     if (token) {
       try {
         await api.post("/api/cart/remove", { itemId });
       } catch (error) {
         console.error("Error removing from cart:", error);
+      }
+    }
+  };
+
+  // Clear entire cart (used after successful order placement)
+  const clearCart = async () => {
+    setCartItems({});
+    if (token) {
+      try {
+        await api.post("/api/cart/clear");
+      } catch (error) {
+        // Non-critical — server already cleared cart after order placement
+        console.error("Error clearing cart:", error);
       }
     }
   };
@@ -73,7 +86,7 @@ const StoreContextProvider = (props) => {
     return totalAmount;
   };
 
-  const fetchFoodList = async () => {
+  const fetchFoodList = useCallback(async () => {
     try {
       setLoading(true);
       const response = await api.get("/api/food/list");
@@ -83,7 +96,7 @@ const StoreContextProvider = (props) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const loadCartData = async () => {
     try {
@@ -114,6 +127,7 @@ const StoreContextProvider = (props) => {
     setCartItems,
     addToCart,
     removeFromCart,
+    clearCart,
     getTotalCartAmount,
     token,
     setToken,
@@ -123,7 +137,8 @@ const StoreContextProvider = (props) => {
     setSearchQuery,
     loading,
     theme,
-    toggleTheme
+    toggleTheme,
+    fetchFoodList,
   };
 
   return (

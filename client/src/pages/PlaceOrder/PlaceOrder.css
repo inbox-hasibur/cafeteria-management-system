@@ -1,77 +1,184 @@
 .place-order {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 40px;
-    margin: 100px auto;
-    padding: 0 40px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 40px;
+  margin: 80px auto;
+  padding: 0 20px;
 }
 
 .place-order-left {
-    flex: 1;
-    max-width: 600px;
+  flex: 1;
+  max-width: 600px;
 }
 
 .place-order-left .title {
-    font-size: 28px;
-    font-weight: 600;
-    margin-bottom:35px;  
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: var(--header-text);
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.place-order-left .title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background-color: var(--primary-color);
+  border-radius: 2px;
 }
 
 .place-order-left input {
-    width: 100%;
-    padding: 10px 15px;  
-    margin-bottom: 10px; 
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 14px;
-    outline: none;
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 12px;
+  border: 1px solid var(--input-border);
+  background-color: var(--bg-color-alt);
+  color: var(--text-color);
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.place-order-left input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(126, 191, 8, 0.15);
+}
+
+.place-order-left input::placeholder {
+  color: var(--text-color-muted);
 }
 
 .multi-fields {
-    display: flex;
-    gap: 10px;
+  display: flex;
+  gap: 12px;
 }
 
 .place-order-right {
-    width: 380px;
+  width: 400px;
+  flex-shrink: 0;
 }
 
 .cart-total {
-    background: #f8f8f8;
-    padding: 28px; 
-    border-radius: 12px;
-    border: 1px solid #eee;
+  background: var(--card-bg);
+  padding: 28px;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 20px var(--shadow-color);
 }
 
 .cart-total h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--header-text);
 }
 
 .cart-total-details {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    font-size: 15px;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  font-size: 15px;
+  color: var(--text-color);
 }
 
 .cart-total hr {
-    margin: 15px 0;
-    border: none;
-    height: 1px;
-    background-color: #ddd;
+  margin: 8px 0;
+  border: none;
+  height: 1px;
+  background-color: var(--border-color);
 }
 
-.cart-total button {
+/* Payment Options */
+.payment-options {
+  margin-top: 24px;
+}
+
+.payment-options h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--header-text);
+  margin-bottom: 14px;
+}
+
+.payment-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.payment-option:has(input:checked) {
+  border-color: var(--primary-color);
+  background-color: rgba(126, 191, 8, 0.07);
+}
+
+.payment-option input[type="radio"] {
+  width: auto;
+  margin: 0;
+  accent-color: var(--primary-color);
+  cursor: pointer;
+}
+
+.payment-option label {
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.payment-icon {
+  font-size: 18px;
+}
+
+/* Buttons */
+.cart-buttons {
+  margin-top: 20px;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 15px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s, opacity 0.2s;
+  letter-spacing: 0.5px;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: var(--primary-color-hover);
+  transform: translateY(-2px);
+}
+
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .place-order {
+    flex-direction: column;
+  }
+  .place-order-right {
     width: 100%;
-    padding: 15px;
-    background: #7ebf08;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 20px;
+  }
 }
