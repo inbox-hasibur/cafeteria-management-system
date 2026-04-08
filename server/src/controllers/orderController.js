@@ -20,6 +20,12 @@ const placeOrder = async (req, res) => {
       return res.json({ success: false, message: "No items in order" });
     }
 
+    // Generate unique token
+    let token;
+    do {
+      token = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit token
+    } while (await orderModel.findOne({ token }));
+
     // 1. Create order in Database
     const newOrder = new orderModel({
       userId: req.userId,
@@ -32,6 +38,7 @@ const placeOrder = async (req, res) => {
       address: address,
       paymentMethod: paymentMethod,
       payment: false, // always false initially; updated after payment confirmed
+      token: token,
     });
 
     await newOrder.save();
@@ -47,6 +54,7 @@ const placeOrder = async (req, res) => {
         success: true,
         message: `Order placed successfully! Please pay via ${paymentMethod}.`,
         orderId: newOrder._id,
+        token: newOrder.token,
       });
     }
 

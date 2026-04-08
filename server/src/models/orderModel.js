@@ -42,6 +42,7 @@ const orderSchema = new mongoose.Schema(
       enum: ["Pending", "Processing", "Out for Delivery", "Delivered", "Cancelled"],
     },
     payment: { type: Boolean, default: false },
+    token: { type: String, unique: true }, // Unique token for order pickup
   },
   {
     timestamps: true,

@@ -55,6 +55,7 @@ const Orders = () => {
         <body>
           <h1>Customer Invoice</h1>
           <p><strong>Order ID:</strong> ${order._id}</p>
+          <p><strong>Token:</strong> ${order.token}</p>
           <p><strong>Status:</strong> ${order.status}</p>
           <p><strong>Date:</strong> ${new Date(order.createdAt).toLocaleDateString()}</p>
           <p><strong>Customer:</strong> ${order.address.firstName} ${order.address.lastName}</p>
@@ -112,6 +113,7 @@ const Orders = () => {
               </p>
               <p>BDT {order.amount}</p>
               <p>Items: {order.items.length}</p>
+              <p><strong>Token: {order.token}</strong></p>
               
               <div className="status-container">
                 <select 

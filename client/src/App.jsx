@@ -8,6 +8,7 @@ import Cart from './pages/Cart/Cart'
 import PlaceOrder from './pages/PlaceOrder/PlaceOrder'
 import Verify from './pages/Verify/Verify'
 import MyOrders from './pages/MyOrders/MyOrders'
+import Invoice from './pages/Invoice/Invoice'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -90,6 +91,7 @@ const App = () => {
             <Route path='/order' element={<PlaceOrder />} />
             <Route path='/verify' element={<Verify />} />
             <Route path="/myorders" element={<MyOrders/>} />
+            <Route path="/invoice/:orderId" element={<Invoice />} />
           </Route>
 
           {/* Admin Routes */}

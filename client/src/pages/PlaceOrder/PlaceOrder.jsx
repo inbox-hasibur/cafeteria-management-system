@@ -25,6 +25,8 @@ const PlaceOrder = () => {
 
   const [paymentMethod, setPaymentMethod] = useState("COD");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [orderDetails, setOrderDetails] = useState(null);
 
   useEffect(() => {
     if (!token) {
@@ -77,8 +79,12 @@ const PlaceOrder = () => {
         if (paymentMethod === "COD" || paymentMethod === "bKash" || paymentMethod === "Nagad") {
           // Clear the React cart state immediately
           await clearCart();
-          toast.success(response.data.message || "Order placed successfully!");
-          navigate("/myorders");
+          setOrderDetails({
+            orderId: response.data.orderId,
+            token: response.data.token, // Assume token is returned
+            message: response.data.message,
+          });
+          setShowModal(true);
         } else {
           // Stripe — redirect to payment page
           if (response.data.session_url) {
@@ -272,6 +278,20 @@ const PlaceOrder = () => {
         </div>
       </div>
     </form>
+
+    {showModal && orderDetails && (
+      <div className="order-modal">
+        <div className="modal-content">
+          <h2>Thank You for Ordering!</h2>
+          <p>{orderDetails.message}</p>
+          <p><strong>Order Token: {orderDetails.token}</strong></p>
+          <p>Please show this token when picking up your order.</p>
+          <button onClick={() => navigate(`/invoice/${orderDetails.orderId}`)}>View Invoice</button>
+          <button onClick={() => { setShowModal(false); navigate("/myorders"); }}>Close</button>
+        </div>
+      </div>
+    )}
+  </div>
   );
 };
 
