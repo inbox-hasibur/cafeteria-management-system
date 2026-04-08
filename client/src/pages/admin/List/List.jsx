@@ -64,7 +64,7 @@ const List = () => {
             const roundedRating = Math.max(0, Math.min(5, Math.floor(averageRating)));
 
             return (
-            <div key={item._id} className="list-table-format">
+            <div key={item._id} className="list-table-format list-row-card">
               <img src={item.image && item.image.startsWith("http") ? item.image : API_BASE + "/images/" + item.image} alt={item.name} />
               <div className="item-details">
                 <p className="item-name">{item.name}</p>

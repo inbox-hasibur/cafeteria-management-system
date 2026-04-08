@@ -16,6 +16,15 @@ const OrderRowIcon = () => (
 const Orders = () => {
   const [data, setData] = useState([]);
 
+  const getCustomerName = (address = {}) => {
+    const first = (address.firstName || "").trim();
+    const last = (address.lastName || "").trim();
+    if (!first && !last) return "Guest";
+    if (!last) return first;
+    if (first.toLowerCase() === last.toLowerCase()) return first;
+    return `${first} ${last}`;
+  };
+
   const fetchOrders = async () => {
     try {
       const response = await api.get("/api/orders/list");
@@ -66,7 +75,7 @@ const Orders = () => {
           <p><strong>Order ID:</strong> ${order._id}</p>
           <p><strong>Status:</strong> ${order.status}</p>
           <p><strong>Date:</strong> ${new Date(order.createdAt).toLocaleDateString()}</p>
-          <p><strong>Customer:</strong> ${order.address.firstName} ${order.address.lastName}</p>
+          <p><strong>Customer:</strong> ${getCustomerName(order.address)}</p>
           <p><strong>Phone:</strong> ${order.address.phone}</p>
           <table>
             <thead>
@@ -112,7 +121,7 @@ const Orders = () => {
               <OrderRowIcon />
               <div className="order-info">
                 <p className="order-id">Order #{order._id.slice(-6)}</p>
-                <p className="order-customer">{order.address.firstName} {order.address.lastName}</p>
+                <p className="order-customer">{getCustomerName(order.address)}</p>
                 <p className="order-date">{new Date(order.createdAt).toLocaleDateString()}</p>
               </div>
               <p className="order-items">

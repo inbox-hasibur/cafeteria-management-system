@@ -130,8 +130,10 @@ div, p, h1, h2, h3, span, button, input {
 
 .admin-main {
   flex: 1;
-  padding: 20px;
+  padding: 16px;
   background-color: var(--bg-color);
+  width: min(100%, 1200px);
+  margin: 0 auto;
 }
 
 /* Mobile Responsiveness for Admin */
@@ -149,6 +151,6 @@ div, p, h1, h2, h3, span, button, input {
   }
 
   .admin-main {
-    padding: 10px;
+    padding: 10px 8px;
   }
 }
