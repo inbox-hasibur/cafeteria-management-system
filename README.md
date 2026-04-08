@@ -1,5 +1,8 @@
 # 🍋 Lemonlime Cafeteria Management System
 
+## 🌐 Live Demo
+- **Client Application**: [https://lemonlime-iubat.vercel.app/](https://lemonlime-iubat.vercel.app/)
+
 [![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
 [![React](https://img.shields.io/badge/React-19+-blue.svg)](https://reactjs.org/)
@@ -154,7 +157,3 @@ To access the admin dashboard:
 4. Use these credentials:
    - **Email**: admin
    - **Password**: admin123
-
-## 🌐 Live Demo
-
-- **Client Application**: [https://lemonlime-iubat.vercel.app/](https://lemonlime-iubat.vercel.app/)
