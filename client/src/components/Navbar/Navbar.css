@@ -166,3 +166,26 @@
   border-top: 1px solid var(--border-color);
   width: 100%;
 }
+
+/* Mobile Responsive Navbar */
+@media (max-width: 768px) {
+  .navbar .logo {
+    width: 120px;
+  }
+  .navbar-menu {
+    display: none; /* Hide standard menu on mobile, typically rely on bottom nav or hamburger. Given current setup, let's just make it smaller or hidden */
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar .logo {
+    width: 100px;
+  }
+  .navbar-right {
+    gap: 15px;
+  }
+  .signin-btn {
+    padding: 8px 20px;
+    font-size: 14px;
+  }
+}

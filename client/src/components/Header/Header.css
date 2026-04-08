@@ -2,8 +2,11 @@
     height: 34vw;
     margin: 20px auto;
     background: url('/header_img.png') no-repeat;
-    background-size: contain;
+    background-size: cover;
+    background-position: center;
+    border-radius: 20px;
     position: relative;
+    overflow: hidden;
 }
 
 .header-contents {
@@ -45,4 +48,50 @@
 .header-contents button:hover {
     transform: scale(1.05);
     background-color: var(--card-bg, #f0f0f0);
+}
+
+/* Mobile Responsive Header */
+@media (max-width: 768px) {
+    .header {
+        height: 45vw;
+        border-radius: 15px;
+    }
+    .header-contents {
+        max-width: 70%;
+        bottom: 10%;
+    }
+    .header-contents h2 {
+        font-size: max(4.5vw, 18px);
+    }
+    .header-contents p {
+        font-size: max(1.5vw, 11px);
+    }
+    .header-contents button {
+        padding: 1.5vw 3vw;
+        font-size: max(1.5vw, 11px);
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        height: 55vw;
+        margin: 10px auto;
+        border-radius: 12px;
+    }
+    .header-contents {
+        max-width: 85%;
+        left: 4vw;
+        gap: 2vw;
+    }
+    .header-contents h2 {
+        font-size: 20px;
+    }
+    .header-contents p {
+        display: none; /* Hide paragraph on very small screens to save space and focus on CTA */
+    }
+    .header-contents button {
+        padding: 8px 18px;
+        font-size: 13px;
+        margin-top: 5px;
+    }
 }
