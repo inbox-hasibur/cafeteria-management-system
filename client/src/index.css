@@ -107,6 +107,11 @@ div, p, h1, h2, h3, span, button, input {
   position: relative;
 }
 
+.admin-header .admin-navbar {
+  flex: 1;
+  width: 100%;
+}
+
 .sidebar-toggle {
   display: none;
   background: none;
@@ -133,6 +138,10 @@ div, p, h1, h2, h3, span, button, input {
 @media (max-width: 768px) {
   .sidebar-toggle {
     display: block;
+  }
+
+  .admin-header .admin-navbar {
+    width: calc(100% - 56px);
   }
 
   .admin-content {

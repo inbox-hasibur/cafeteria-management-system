@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./List.css";
 import { toast } from "react-toastify";
 import api from "../../../utils/api";
@@ -7,7 +7,7 @@ import { API_BASE } from "../../../utils/config";
 const List = () => {
   const [list, setList] = useState([]);
 
-  const fetchList = async () => {
+  const fetchList = useCallback(async () => {
     try {
       const response = await api.get(`/api/food/list`);
       if (response.data.success) {
@@ -19,7 +19,7 @@ const List = () => {
       console.error(err);
       toast.error("Server Error");
     }
-  };
+  }, []);
 
   const removeFood = async (foodId) => {
     try {
@@ -40,7 +40,7 @@ const List = () => {
 
   useEffect(() => {
     fetchList();
-  }, []);
+  }, [fetchList]);
 
   return (
     <div className="list add flex-col">
@@ -57,19 +57,25 @@ const List = () => {
         </div>
 
         {list?.length > 0 ? (
-          list.map((item, index) => (
-            <div key={index} className="list-table-format">
+          list.map((item) => {
+            const averageRating = Number(item.averageRating ?? 0);
+            const totalReviews = Number(item.totalReviews ?? 0);
+            const safeDescription = item.description || "";
+            const roundedRating = Math.max(0, Math.min(5, Math.floor(averageRating)));
+
+            return (
+            <div key={item._id} className="list-table-format">
               <img src={item.image && item.image.startsWith("http") ? item.image : API_BASE + "/images/" + item.image} alt={item.name} />
               <div className="item-details">
                 <p className="item-name">{item.name}</p>
               </div>
-              <p className="item-description">{item.description.length > 50 ? item.description.substring(0, 50) + '...' : item.description}</p>
+              <p className="item-description">{safeDescription.length > 50 ? safeDescription.substring(0, 50) + '...' : safeDescription}</p>
               <p className="item-category">{item.category}</p>
               <p className="item-price">BDT {item.price}</p>
               <div className="item-rating">
-                <span className="rating-stars">{'★'.repeat(Math.floor(item.averageRating))}</span>
-                <span className="rating-value">({item.averageRating.toFixed(1)})</span>
-                <p className="review-count">{item.totalReviews} reviews</p>
+                <span className="rating-stars">{'★'.repeat(roundedRating)}</span>
+                <span className="rating-value">({averageRating.toFixed(1)})</span>
+                <p className="review-count">{totalReviews} reviews</p>
               </div>
               <button
                 onClick={() => removeFood(item._id)}
@@ -78,7 +84,7 @@ const List = () => {
                 Delete
               </button>
             </div>
-          ))
+          )})
         ) : (
           <p>No items found.</p>
         )}

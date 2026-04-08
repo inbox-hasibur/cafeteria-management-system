@@ -1,5 +1,5 @@
 .my-orders {
-  padding: 20px;
+  padding: 12px 20px 20px;
   background-color: var(--bg-color);
   color: var(--text-color);
 }
@@ -7,7 +7,8 @@
 .my-orders h2 {
   font-size: 28px;
   font-weight: 600;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
+  margin-top: 0;
   color: var(--text-color);
   text-align: center;
 }
@@ -15,12 +16,12 @@
 .my-orders .container {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 14px;
 }
 
 .my-orders-order {
   display: grid;
-  grid-template-columns: 0.5fr 1.5fr 2fr 1fr 1fr 1fr 2fr 1fr;
+  grid-template-columns: 0.45fr 1.5fr 2fr 1fr 1fr 2fr 1fr;
   align-items: center;
   gap: 15px;
   padding: 20px;
@@ -36,11 +37,16 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
-.my-orders-order img {
-  width: 50px;
-  height: 50px;
-  object-fit: contain;
-  filter: var(--icon-filter-monochrome);
+.order-row-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: var(--secondary-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-color);
 }
 
 .order-info {
@@ -88,15 +94,6 @@
   color: var(--text-color-muted);
   font-size: 12px;
   margin: 0;
-}
-
-.order-token {
-  font-size: 13px;
-  margin: 0;
-}
-
-.order-token strong {
-  color: var(--primary-color);
 }
 
 .status-container {
@@ -149,7 +146,7 @@
 
 @media (max-width: 1024px) {
   .my-orders-order {
-    grid-template-columns: 0.5fr 1.2fr 1.8fr 0.8fr 0.8fr 0.8fr 1.5fr 0.8fr;
+    grid-template-columns: 0.5fr 1.2fr 1.8fr 0.8fr 0.8fr 1.5fr 0.8fr;
     gap: 12px;
     padding: 15px;
   }
@@ -178,9 +175,6 @@
     font-size: 11px;
   }
 
-  .order-token {
-    font-size: 12px;
-  }
 }
 
 @media (max-width: 768px) {
@@ -199,9 +193,10 @@
     padding: 15px;
   }
 
-  .my-orders-order img {
+  .order-row-icon {
     width: 40px;
     height: 40px;
+    margin: 0 auto;
   }
 
   .order-info {

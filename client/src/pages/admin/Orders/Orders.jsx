@@ -1,8 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "./Orders.css";
-import { assets } from "../../../assets/assets";
 import api from "../../../utils/api";
 import { toast } from "react-toastify";
+
+const OrderRowIcon = () => (
+  <div className="order-row-icon" aria-hidden="true">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 11h6" />
+      <path d="M9 15h6" />
+      <path d="M7 3h10a2 2 0 0 1 2 2v14l-3-2-3 2-3-2-3 2V5a2 2 0 0 1 2-2z" />
+    </svg>
+  </div>
+);
 
 const Orders = () => {
   const [data, setData] = useState([]);
@@ -55,7 +64,6 @@ const Orders = () => {
         <body>
           <h1>Customer Invoice</h1>
           <p><strong>Order ID:</strong> ${order._id}</p>
-          <p><strong>Token:</strong> ${order.token}</p>
           <p><strong>Status:</strong> ${order.status}</p>
           <p><strong>Date:</strong> ${new Date(order.createdAt).toLocaleDateString()}</p>
           <p><strong>Customer:</strong> ${order.address.firstName} ${order.address.lastName}</p>
@@ -98,10 +106,10 @@ const Orders = () => {
       <h2>All Orders</h2>
       <div className="container">
         {data.length === 0 ? <p>No orders yet.</p> : null}
-        {data.map((order, index) => {
+        {data.map((order) => {
           return (
-            <div key={index} className="my-orders-order">
-              <img src={assets.parcel_icon} alt="" />
+            <div key={order._id} className="my-orders-order">
+              <OrderRowIcon />
               <div className="order-info">
                 <p className="order-id">Order #{order._id.slice(-6)}</p>
                 <p className="order-customer">{order.address.firstName} {order.address.lastName}</p>
@@ -118,7 +126,6 @@ const Orders = () => {
               </p>
               <p className="order-amount">BDT {order.amount}</p>
               <p className="order-item-count">Items: {order.items.length}</p>
-              <p className="order-token"><strong>Token: {order.token}</strong></p>
               
               <div className="status-container">
                 <select 
