@@ -5,11 +5,17 @@
   width: 100%;
 }
 
-.list p {
+.list-title {
   font-size: 22px;
   font-weight: 600;
   margin-bottom: 14px;
   color: var(--text-color);
+}
+
+.list-empty-message {
+  font-size: 13px;
+  color: var(--text-color-muted);
+  margin: 2px 0 0;
 }
 
 .list-table {
@@ -161,7 +167,7 @@
     padding: 10px;
   }
 
-  .list p {
+  .list-title {
     font-size: 20px;
   }
 

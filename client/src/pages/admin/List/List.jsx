@@ -44,7 +44,7 @@ const List = () => {
 
   return (
     <div className="list flex-col">
-      <p>All Foods List</p>
+      <p className="list-title">All Foods List</p>
       <div className="list-table">
         <div className="list-table-format title">
           <b>Image</b>
@@ -86,7 +86,7 @@ const List = () => {
             </div>
           )})
         ) : (
-          <p>No items found.</p>
+          <p className="list-empty-message">No items found.</p>
         )}
       </div>
     </div>
