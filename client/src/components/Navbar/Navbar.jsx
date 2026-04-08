@@ -27,7 +27,7 @@ const SunIcon = () => (
   </svg>
 );
 
-const Navbar = ({ setShowLogin }) => {
+const Navbar = ({ setShowLogin, className }) => {
   const [menu, setMenu] = useState("home");
   const { token, setToken, cartItems } = useContext(StoreContext);
   const { isDarkMode, toggleTheme } = useTheme();
@@ -54,7 +54,7 @@ const Navbar = ({ setShowLogin }) => {
   };
 
   return (
-    <div className="navbar">
+    <div className={`navbar ${className || ''}`}>
       <Link to="/">
         <img src={assets.logo} alt="IUBAT Cafeteria" className="logo" />
       </Link>

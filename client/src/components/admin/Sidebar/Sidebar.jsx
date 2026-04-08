@@ -21,9 +21,9 @@ const OrdersIcon = () => (
   </svg>
 );
 
-const Sidebar = () => {
+const Sidebar = ({ className }) => {
   return (
-    <div className='sidebar'>
+    <div className={`sidebar ${className || ''}`}>
       <div className="sidebar-options">
         <NavLink to="/admin/add" className={({ isActive }) => `sidebar-option ${isActive ? 'active' : ''}`}>
           <AddIcon />

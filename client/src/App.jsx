@@ -31,13 +31,23 @@ const CustomerLayout = ({ setShowLogin }) => {
 
 // Layout for Admin Dashboard
 const AdminLayout = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
     <div className="admin-layout">
-      <Navbar /> {/* Can hide or reuse Navbar */}
-      <hr />
-      <div className="admin-content" style={{ display: 'flex' }}>
-        <Sidebar />
-        <div style={{ flex: 1, padding: "20px" }}>
+      <div className="admin-header">
+        <button 
+          className="sidebar-toggle" 
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          aria-label="Toggle sidebar"
+        >
+          ☰
+        </button>
+        <Navbar className="admin-navbar" />
+      </div>
+      <div className="admin-content">
+        <Sidebar className={sidebarOpen ? 'open' : ''} />
+        <div className="admin-main">
           <Outlet />
         </div>
       </div>

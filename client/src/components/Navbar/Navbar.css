@@ -189,3 +189,27 @@
     font-size: 14px;
   }
 }
+
+/* Admin Navbar Styles */
+.admin-navbar {
+  padding: 15px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.admin-navbar .logo {
+  width: 120px;
+}
+
+.admin-navbar .navbar-menu {
+  display: none; /* Hide menu in admin */
+}
+
+.admin-navbar .navbar-right {
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .admin-navbar .logo {
+    width: 100px;
+  }
+}

@@ -1,43 +1,107 @@
+.list {
+  padding: 20px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.list p {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: var(--text-color);
+}
+
+.list-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--bg-color);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
 .list-table-format {
   display: grid;
   grid-template-columns: 0.5fr 2fr 1fr 1fr 0.5fr;
   align-items: center;
-  gap: 10px;
-  padding: 12px 15px;
-  border: 1px solid #cacaca;
-  font-size: 13px;
+  gap: 15px;
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.list-table-format:last-child {
+  border-bottom: none;
 }
 
 .list-table-format.title {
-  background-color: #f9f9f9;
+  background-color: var(--bg-color-alt);
+  font-weight: 600;
+  color: var(--text-color);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.list-table-format:hover {
+  background-color: var(--hover-bg);
 }
 
 .list-table-format img {
-  width: 50px;
-  background-color: #f0f0f0; /* or any valid color */
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
 }
 
-@media (max-width: 600px) {
+.list-table-format p {
+  margin: 0;
+  color: var(--text-color);
+}
+
+.delete-button {
+  padding: 8px 16px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.delete-button:hover {
+  background-color: #c82333;
+}
+
+@media (max-width: 768px) {
+  .list {
+    padding: 10px;
+  }
+
+  .list p {
+    font-size: 20px;
+    text-align: center;
+  }
+
   .list-table-format {
-      grid-template-columns: 1fr 3fr 1fr;
-      gap: 15px;
+    grid-template-columns: 1fr 3fr 1fr;
+    gap: 10px;
+    padding: 12px 15px;
   }
 
   .list-table-format.title {
-      display: none;
-  }
-
-  /* Adjusting text alignment for smaller screens */
-  .list-table-format p,
-  .list-table-format img {
-      text-align: center;
+    display: none;
   }
 
   .list-table-format img {
-      width: 40px; /* Reduce image size on small screens */
+    width: 50px;
+    height: 50px;
   }
 
-  .list-table-format b {
-      font-size: 12px; /* Reduce font size for small screens */
+  .delete-button {
+    padding: 6px 12px;
+    font-size: 11px;
   }
 }
