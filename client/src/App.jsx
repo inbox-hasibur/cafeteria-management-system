@@ -43,7 +43,7 @@ const AdminLayout = () => {
         >
           ☰
         </button>
-        <Navbar className="admin-navbar" />
+        <Navbar className="admin-navbar" hideCartIcon />
       </div>
       <div className="admin-content">
         <Sidebar className={sidebarOpen ? 'open' : ''} />

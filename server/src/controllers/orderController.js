@@ -30,6 +30,7 @@ const placeOrder = async (req, res) => {
     const newOrder = new orderModel({
       userId: req.userId,
       items: items.map(item => ({
+        foodId: item.foodId,
         name: item.name,
         quantity: item.quantity,
         price: item.price,

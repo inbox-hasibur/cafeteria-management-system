@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "./PlaceOrder.css";
 import { StoreContext } from "../../context/StoreContext";
 import api from "../../utils/api";
@@ -27,6 +27,7 @@ const PlaceOrder = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [orderDetails, setOrderDetails] = useState(null);
+  const redirectTimeoutRef = useRef(null);
 
   useEffect(() => {
     if (!token) {
@@ -83,8 +84,15 @@ const PlaceOrder = () => {
             orderId: response.data.orderId,
             token: response.data.token, // Assume token is returned
             message: response.data.message,
+            paymentMethod,
           });
           setShowModal(true);
+
+          if (paymentMethod === "COD") {
+            redirectTimeoutRef.current = setTimeout(() => {
+              navigate(`/invoice/${response.data.orderId}`);
+            }, 2200);
+          }
         } else {
           // Stripe — redirect to payment page
           if (response.data.session_url) {
@@ -104,6 +112,14 @@ const PlaceOrder = () => {
       setIsSubmitting(false);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (redirectTimeoutRef.current) {
+        clearTimeout(redirectTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <>
@@ -287,8 +303,16 @@ const PlaceOrder = () => {
           <p>{orderDetails.message}</p>
           <p><strong>Order Token: {orderDetails.token}</strong></p>
           <p>Please show this token when picking up your order.</p>
-          <button onClick={() => navigate(`/invoice/${orderDetails.orderId}`)}>View Invoice</button>
+          <button onClick={() => {
+            if (redirectTimeoutRef.current) clearTimeout(redirectTimeoutRef.current);
+            navigate(`/invoice/${orderDetails.orderId}`);
+          }}>
+            View Invoice
+          </button>
           <button onClick={() => { setShowModal(false); navigate("/myorders"); }}>Close</button>
+          {orderDetails.paymentMethod === "COD" && (
+            <p className="redirect-text">Redirecting to invoice...</p>
+          )}
         </div>
       </div>
     )}

@@ -27,7 +27,7 @@ const SunIcon = () => (
   </svg>
 );
 
-const Navbar = ({ setShowLogin, className }) => {
+const Navbar = ({ setShowLogin, className, hideCartIcon = false }) => {
   const [menu, setMenu] = useState("home");
   const { token, setToken, cartItems } = useContext(StoreContext);
   const { isDarkMode, toggleTheme } = useTheme();
@@ -99,16 +99,18 @@ const Navbar = ({ setShowLogin, className }) => {
           {isDarkMode ? <SunIcon /> : <MoonIcon />}
         </button>
 
-        <div className="navbar-search-icon">
-          <Link to="/cart">
-            <img src={assets.basket_icon} alt="Cart" />
-          </Link>
-          {getTotalQuantity() > 0 && (
-            <div className="dot">
-              <span>{getTotalQuantity()}</span>
-            </div>
-          )}
-        </div>
+        {!hideCartIcon && (
+          <div className="navbar-search-icon">
+            <Link to="/cart">
+              <img src={assets.basket_icon} alt="Cart" />
+            </Link>
+            {getTotalQuantity() > 0 && (
+              <div className="dot">
+                <span>{getTotalQuantity()}</span>
+              </div>
+            )}
+          </div>
+        )}
 
         {!token ? (
           <button className="signin-btn" onClick={() => setShowLogin(true)}>Sign In</button>

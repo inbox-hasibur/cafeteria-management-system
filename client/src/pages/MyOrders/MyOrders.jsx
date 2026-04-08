@@ -83,6 +83,7 @@ const MyOrders = () => {
   const [expandedOrder, setExpandedOrder] = useState(null);
   const [ratingItem, setRatingItem] = useState(null); // { orderId, item }
   const [submittedRatings, setSubmittedRatings] = useState({}); // { `${orderId}_${foodId}`: rating }
+  const [existingReviews, setExistingReviews] = useState({}); // { `${orderId}_${foodId}`: review }
 
   const fetchOrders = useCallback(async () => {
     setLoading(true);
@@ -105,9 +106,60 @@ const MyOrders = () => {
     }
   }, [token, fetchOrders]);
 
+  useEffect(() => {
+    const hydrateReviews = async () => {
+      if (!token || data.length === 0) return;
+
+      const deliveredItems = data.flatMap((order) =>
+        order.status === "Delivered"
+          ? order.items
+              .filter((item) => item.foodId)
+              .map((item) => ({ orderId: order._id, foodId: item.foodId }))
+          : []
+      );
+
+      if (deliveredItems.length === 0) return;
+
+      try {
+        const checks = await Promise.all(
+          deliveredItems.map(({ orderId, foodId }) =>
+            api.get(`/api/review/check/${foodId}/${orderId}`)
+          )
+        );
+
+        const ratingMap = {};
+        const reviewMap = {};
+
+        checks.forEach((res, idx) => {
+          const payload = res.data;
+          if (payload.success && payload.reviewed && payload.review) {
+            const { orderId, foodId } = deliveredItems[idx];
+            const key = `${orderId}_${foodId}`;
+            ratingMap[key] = payload.review.rating;
+            reviewMap[key] = payload.review;
+          }
+        });
+
+        setSubmittedRatings((prev) => ({ ...prev, ...ratingMap }));
+        setExistingReviews((prev) => ({ ...prev, ...reviewMap }));
+      } catch (error) {
+        console.error("Error loading existing reviews:", error);
+      }
+    };
+
+    hydrateReviews();
+  }, [data, token]);
+
   const handleRatingSuccess = async (foodId, rating) => {
     const key = `${ratingItem?.orderId}_${foodId}`;
     setSubmittedRatings((prev) => ({ ...prev, [key]: rating }));
+    setExistingReviews((prev) => ({
+      ...prev,
+      [key]: {
+        ...prev[key],
+        rating,
+      },
+    }));
     setRatingItem(null);
     // Refresh food list so average ratings update on home page
     await fetchFoodList();
@@ -269,7 +321,7 @@ const MyOrders = () => {
                         const alreadyRated = submittedRatings[ratingKey];
                         const isRatingThis =
                           ratingItem?.orderId === order._id &&
-                          ratingItem?.item?.name === item.name;
+                          ratingItem?.item?.foodId === item.foodId;
 
                         return (
                           <div key={idx} className="order-item-row">
@@ -308,6 +360,7 @@ const MyOrders = () => {
                         item={ratingItem.item}
                         orderId={order._id}
                         onSuccess={handleRatingSuccess}
+                        existingReview={existingReviews[`${order._id}_${ratingItem.item.foodId}`]}
                       />
                     )}
 
