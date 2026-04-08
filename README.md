@@ -158,8 +158,6 @@ To access the admin dashboard:
 ## 🌐 Live Demo
 
 - **Client Application**: [https://lemonlime-iubat.vercel.app/](https://lemonlime-iubat.vercel.app/)
-- **Admin Dashboard**: [https://mern-rms.vercel.app/](https://mern-rms.vercel.app/)
-- **API Server**: [https://mern-rms.onrender.com](https://mern-rms.onrender.com)
 
 ## 📡 API Endpoints
 
@@ -167,44 +165,20 @@ To access the admin dashboard:
 - `GET /api/food/list` - Get all food items
 - `POST /api/food/add` - Add new food item (Admin)
 - `POST /api/food/remove` - Remove food item (Admin)
-
 ### User Management
 - `POST /api/user/register` - User registration
 - `POST /api/user/login` - User login
 - `POST /api/user/admin` - Admin login
-
 ### Cart Operations
 - `POST /api/cart/add` - Add item to cart
 - `POST /api/cart/remove` - Remove item from cart
 - `POST /api/cart/get` - Get user's cart
-
 ### Order Management
 - `POST /api/orders/place` - Place new order
 - `POST /api/orders/verify` - Verify payment
 - `POST /api/orders/userorders` - Get user's orders
 - `GET /api/orders/list` - Get all orders (Admin)
 - `POST /api/orders/status` - Update order status (Admin)
-
 ### Review System
 - `POST /api/review/add` - Add food review
 - `GET /api/review/food/:foodId` - Get reviews for food item
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the ISC License - see the [LICENSE](LICENSE) file for details.
-
-## 📞 Support
-
-For support or questions, please open an issue on GitHub or contact the maintainers.
-
----
-
-**Built with ❤️ for efficient cafeteria management**
