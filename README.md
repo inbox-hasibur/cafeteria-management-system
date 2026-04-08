@@ -158,27 +158,3 @@ To access the admin dashboard:
 ## 🌐 Live Demo
 
 - **Client Application**: [https://lemonlime-iubat.vercel.app/](https://lemonlime-iubat.vercel.app/)
-
-## 📡 API Endpoints
-
-### Food Management
-- `GET /api/food/list` - Get all food items
-- `POST /api/food/add` - Add new food item (Admin)
-- `POST /api/food/remove` - Remove food item (Admin)
-### User Management
-- `POST /api/user/register` - User registration
-- `POST /api/user/login` - User login
-- `POST /api/user/admin` - Admin login
-### Cart Operations
-- `POST /api/cart/add` - Add item to cart
-- `POST /api/cart/remove` - Remove item from cart
-- `POST /api/cart/get` - Get user's cart
-### Order Management
-- `POST /api/orders/place` - Place new order
-- `POST /api/orders/verify` - Verify payment
-- `POST /api/orders/userorders` - Get user's orders
-- `GET /api/orders/list` - Get all orders (Admin)
-- `POST /api/orders/status` - Update order status (Admin)
-### Review System
-- `POST /api/review/add` - Add food review
-- `GET /api/review/food/:foodId` - Get reviews for food item
