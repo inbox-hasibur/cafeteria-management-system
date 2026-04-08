@@ -46,7 +46,7 @@ const RatingForm = ({ item, orderId, onSuccess, existingReview }) => {
       });
       if (response.data.success) {
         toast.success("Review submitted! Thank you.");
-        onSuccess(item.foodId, rating);
+        onSuccess(item.foodId, rating, comment);
       } else {
         toast.error(response.data.message || "Failed to submit review.");
       }
@@ -77,13 +77,24 @@ const RatingForm = ({ item, orderId, onSuccess, existingReview }) => {
 };
 
 const MyOrders = () => {
-  const { token, fetchFoodList } = useContext(StoreContext);
+  const { token, fetchFoodList, food_list } = useContext(StoreContext);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expandedOrder, setExpandedOrder] = useState(null);
   const [ratingItem, setRatingItem] = useState(null); // { orderId, item }
   const [submittedRatings, setSubmittedRatings] = useState({}); // { `${orderId}_${foodId}`: rating }
   const [existingReviews, setExistingReviews] = useState({}); // { `${orderId}_${foodId}`: review }
+
+  const resolveFoodId = useCallback(
+    (item) => {
+      if (item.foodId) return String(item.foodId);
+      const matchedFood = food_list.find(
+        (food) => food.name?.trim().toLowerCase() === item.name?.trim().toLowerCase()
+      );
+      return matchedFood?._id ? String(matchedFood._id) : null;
+    },
+    [food_list]
+  );
 
   const fetchOrders = useCallback(async () => {
     setLoading(true);
@@ -110,13 +121,12 @@ const MyOrders = () => {
     const hydrateReviews = async () => {
       if (!token || data.length === 0) return;
 
-      const deliveredItems = data.flatMap((order) =>
-        order.status === "Delivered"
-          ? order.items
-              .filter((item) => item.foodId)
-              .map((item) => ({ orderId: order._id, foodId: item.foodId }))
-          : []
-      );
+      const deliveredItems = data.flatMap((order) => {
+        if (order.status !== "Delivered") return [];
+        return order.items
+          .map((item) => ({ orderId: order._id, foodId: resolveFoodId(item) }))
+          .filter((entry) => Boolean(entry.foodId));
+      });
 
       if (deliveredItems.length === 0) return;
 
@@ -148,9 +158,9 @@ const MyOrders = () => {
     };
 
     hydrateReviews();
-  }, [data, token]);
+  }, [data, token, resolveFoodId]);
 
-  const handleRatingSuccess = async (foodId, rating) => {
+  const handleRatingSuccess = async (foodId, rating, reviewComment = "") => {
     const key = `${ratingItem?.orderId}_${foodId}`;
     setSubmittedRatings((prev) => ({ ...prev, [key]: rating }));
     setExistingReviews((prev) => ({
@@ -158,6 +168,7 @@ const MyOrders = () => {
       [key]: {
         ...prev[key],
         rating,
+        comment: reviewComment,
       },
     }));
     setRatingItem(null);
@@ -317,11 +328,12 @@ const MyOrders = () => {
                     {/* Order Items Table */}
                     <div className="order-items-list">
                       {order.items.map((item, idx) => {
-                        const ratingKey = `${order._id}_${item.foodId || idx}`;
+                        const resolvedFoodId = resolveFoodId(item);
+                        const ratingKey = `${order._id}_${resolvedFoodId || idx}`;
                         const alreadyRated = submittedRatings[ratingKey];
                         const isRatingThis =
                           ratingItem?.orderId === order._id &&
-                          ratingItem?.item?.foodId === item.foodId;
+                          ratingItem?.item?.foodId === resolvedFoodId;
 
                         return (
                           <div key={idx} className="order-item-row">
@@ -331,14 +343,14 @@ const MyOrders = () => {
                               <span className="order-item-price">BDT {item.price * item.quantity}</span>
                             </div>
 
-                            {isDelivered && item.foodId && (
+                            {isDelivered && resolvedFoodId && (
                               <button
                                 className={`rate-btn ${alreadyRated ? "rated" : ""}`}
                                 onClick={() =>
                                   setRatingItem(
                                     isRatingThis
                                       ? null
-                                      : { orderId: order._id, item }
+                                      : { orderId: order._id, item: { ...item, foodId: resolvedFoodId } }
                                   )
                                 }
                               >

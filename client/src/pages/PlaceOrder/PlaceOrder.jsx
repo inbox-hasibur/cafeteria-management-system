@@ -44,6 +44,23 @@ const PlaceOrder = () => {
     setData((data) => ({ ...data, [name]: value }));
   };
 
+  const handleOfflineOrderSuccess = async (responseData, selectedPaymentMethod) => {
+    await clearCart();
+    setOrderDetails({
+      orderId: responseData.orderId,
+      token: responseData.token,
+      message: responseData.message || "Order placed successfully!",
+      paymentMethod: selectedPaymentMethod,
+    });
+    setShowModal(true);
+
+    if (selectedPaymentMethod === "COD") {
+      redirectTimeoutRef.current = setTimeout(() => {
+        navigate(`/invoice/${responseData.orderId}`);
+      }, 2200);
+    }
+  };
+
   const placeOrder = async (event) => {
     event.preventDefault();
     if (isSubmitting) return;
@@ -78,21 +95,7 @@ const PlaceOrder = () => {
       const response = await api.post("/api/orders/place", orderData);
       if (response.data.success) {
         if (paymentMethod === "COD" || paymentMethod === "bKash" || paymentMethod === "Nagad") {
-          // Clear the React cart state immediately
-          await clearCart();
-          setOrderDetails({
-            orderId: response.data.orderId,
-            token: response.data.token, // Assume token is returned
-            message: response.data.message,
-            paymentMethod,
-          });
-          setShowModal(true);
-
-          if (paymentMethod === "COD") {
-            redirectTimeoutRef.current = setTimeout(() => {
-              navigate(`/invoice/${response.data.orderId}`);
-            }, 2200);
-          }
+          await handleOfflineOrderSuccess(response.data, paymentMethod);
         } else {
           // Stripe — redirect to payment page
           if (response.data.session_url) {
@@ -101,13 +104,25 @@ const PlaceOrder = () => {
             toast.error("Could not initiate payment. Please try again.");
           }
         }
+      } else if (
+        (paymentMethod === "COD" || paymentMethod === "bKash" || paymentMethod === "Nagad") &&
+        response.data.orderId
+      ) {
+        await handleOfflineOrderSuccess(response.data, paymentMethod);
       } else {
         toast.error(response.data.message || "Error placing order");
       }
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || "Server error. Please try again later."
-      );
+      if (
+        (paymentMethod === "COD" || paymentMethod === "bKash" || paymentMethod === "Nagad") &&
+        error.response?.data?.orderId
+      ) {
+        await handleOfflineOrderSuccess(error.response.data, paymentMethod);
+      } else {
+        toast.error(
+          error.response?.data?.message || "Server error. Please try again later."
+        );
+      }
     } finally {
       setIsSubmitting(false);
     }

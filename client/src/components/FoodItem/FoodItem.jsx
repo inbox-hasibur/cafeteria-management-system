@@ -19,7 +19,7 @@ const StarRating = ({ rating, totalReviews }) => {
         ))}
       </div>
       <span className="rating-count">
-        {rating > 0 ? `${rating.toFixed(1)} (${totalReviews})` : "No ratings yet"}
+        {rating > 0 ? `${rating.toFixed(1)} (${totalReviews})` : ""}
       </span>
     </div>
   );

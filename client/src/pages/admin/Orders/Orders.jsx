@@ -19,10 +19,23 @@ const Orders = () => {
   const getCustomerName = (address = {}) => {
     const first = (address.firstName || "").trim();
     const last = (address.lastName || "").trim();
-    if (!first && !last) return "Guest";
-    if (!last) return first;
-    if (first.toLowerCase() === last.toLowerCase()) return first;
-    return `${first} ${last}`;
+    const combined = `${first} ${last}`.trim();
+
+    if (!combined) return "Guest";
+
+    // Remove repeated words while preserving original order/casing.
+    const seen = new Set();
+    const uniqueParts = combined
+      .split(/\s+/)
+      .filter(Boolean)
+      .filter((part) => {
+        const key = part.toLowerCase();
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+
+    return uniqueParts.join(" ");
   };
 
   const fetchOrders = async () => {

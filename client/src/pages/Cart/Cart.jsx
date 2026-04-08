@@ -25,7 +25,12 @@ const Cart = () => {
 
   return (
     <div className="cart">
+      <div className="cart-layout">
       <div className="cart-items">
+        <div className="cart-header">
+          <h2>Your Cart</h2>
+          <p>Review your items before checkout</p>
+        </div>
         <div className="cart-items-title">
           <p>Image</p>
           <p>Title</p>
@@ -90,6 +95,7 @@ const Cart = () => {
             </button>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
