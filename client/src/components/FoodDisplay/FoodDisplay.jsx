@@ -19,9 +19,10 @@ const FoodDisplay = () => {
 
   const filteredFoods = food_list.filter((item) => {
     const matchesCategory = category === "All" || category === item.category;
+    const searchLower = (searchQuery || "").toLowerCase();
     const matchesSearch =
-      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchQuery.toLowerCase());
+      (item.name || "").toLowerCase().includes(searchLower) ||
+      (item.description || "").toLowerCase().includes(searchLower);
     return matchesCategory && matchesSearch;
   });
 
