@@ -13,6 +13,8 @@ const Add = () => {
     image: null,
   });
 
+  const [isDragOver, setIsDragOver] = useState(false);
+
   const onChangeHandler = (event) => {
     const { name, value } = event.target;
     setData((prevState) => ({
@@ -22,10 +24,37 @@ const Add = () => {
   };
 
   const onImageChange = (event) => {
-    setData((prevState) => ({
-      ...prevState,
-      image: event.target.files[0],
-    }));
+    const file = event.target.files[0];
+    if (file) {
+      setData((prevState) => ({
+        ...prevState,
+        image: file,
+      }));
+    }
+  };
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    setIsDragOver(false);
+    const file = event.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      setData((prevState) => ({
+        ...prevState,
+        image: file,
+      }));
+    } else {
+      toast.error("Please drop a valid image file.");
+    }
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (event) => {
+    event.preventDefault();
+    setIsDragOver(false);
   };
 
   const onSubmitHandler = async (event) => {
@@ -68,20 +97,31 @@ const Add = () => {
       <form className='flex-col' onSubmit={onSubmitHandler}>
         <div className="add-img-upload flex-col">
           <p>Upload Image</p>
-          <label htmlFor="image">
-            {data.image ? (
-              <img src={URL.createObjectURL(data.image)} alt="Uploaded Preview" />
-            ) : (
-              <img src={assets.upload_area} alt="Upload Icon" />
-            )}
-          </label>
-          <input
-            onChange={onImageChange}
-            type="file"
-            id="image"
-            hidden
-            required
-          />
+          <div
+            className={`upload-area ${isDragOver ? 'drag-over' : ''}`}
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+          >
+            <label htmlFor="image">
+              {data.image ? (
+                <img src={URL.createObjectURL(data.image)} alt="Uploaded Preview" />
+              ) : (
+                <div className="upload-placeholder">
+                  <img src={assets.upload_area} alt="Upload Icon" />
+                  <p>Click to upload or drag and drop</p>
+                </div>
+              )}
+            </label>
+            <input
+              onChange={onImageChange}
+              type="file"
+              id="image"
+              hidden
+              accept="image/*"
+              required
+            />
+          </div>
         </div>
 
         <div className="add-product-name flex-col">

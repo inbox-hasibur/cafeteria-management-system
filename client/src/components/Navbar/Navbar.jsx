@@ -3,6 +3,7 @@ import "./Navbar.css";
 import { assets } from "../../assets/assets";
 import { Link, useNavigate } from "react-router-dom";
 import { StoreContext } from "../../context/StoreContext";
+import { useTheme } from "../../context/ThemeContext";
 import { toast } from "react-toastify";
 
 // Monochromatic SVG icons — inherit currentColor for theme compatibility
@@ -28,7 +29,8 @@ const SunIcon = () => (
 
 const Navbar = ({ setShowLogin }) => {
   const [menu, setMenu] = useState("home");
-  const { token, setToken, cartItems, theme, toggleTheme } = useContext(StoreContext);
+  const { token, setToken, cartItems } = useContext(StoreContext);
+  const { isDarkMode, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   const logout = () => {
@@ -91,10 +93,10 @@ const Navbar = ({ setShowLogin }) => {
         <button
           onClick={toggleTheme}
           className="theme-toggle"
-          aria-label={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
-          title={theme === "light" ? "Dark Mode" : "Light Mode"}
+          aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+          title={isDarkMode ? "Light Mode" : "Dark Mode"}
         >
-          {theme === "light" ? <MoonIcon /> : <SunIcon />}
+          {isDarkMode ? <SunIcon /> : <MoonIcon />}
         </button>
 
         <div className="navbar-search-icon">
