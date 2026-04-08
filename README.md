@@ -1,84 +1,210 @@
-# Lemonlime Cafeteria Management System
+# 🍋 Lemonlime Cafeteria Management System
 
-A complete MERN stack-based restaurant and cafeteria management system. Features an elegant user-facing ordering platform and a comprehensive admin panel for restaurant management.
+[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
+[![React](https://img.shields.io/badge/React-19+-blue.svg)](https://reactjs.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-8+-green.svg)](https://www.mongodb.com/)
+[![Express.js](https://img.shields.io/badge/Express.js-5+-black.svg)](https://expressjs.com/)
 
-## 🚀 Features
+A comprehensive MERN stack-based restaurant and cafeteria management system featuring an elegant user-facing ordering platform and a robust admin panel for seamless restaurant operations.
 
-### Client (User Facing)
-- **Menu Exploration**: Category-based food filtering
-- **Cart System**: Real-time cart updates with state management
-- **User Authentication**: Secure JWT-based login/signup
-- **Secure Checkout**: Stripe integration for live payments
-- **Order Tracking**: Order history with invoice printing
-- **Interactive UI**: Toast notifications, loading states, and responsive design
+## 🌟 Features
 
-### Admin Panel
-- **Food Management**: Add, List, and Delete food items with category support
-- **Image Upload**: Seamless food image uploads using Multer
-- **Order Processing**: Real-time order status updates (Pending -> Processing -> Delivered)
-- **Reporting**: Admin-side invoice ticket printing
+### 👤 Customer Portal
+- **Intuitive Menu Exploration**: Browse food items by categories (Biryani, Rice, Curry, Fish, Shawarma, Sandwich, Special, Vegetable, Beverage)
+- **Advanced Cart Management**: Real-time cart updates with quantity adjustments and persistent state
+- **Secure Authentication**: JWT-based user registration and login with role-based access
+- **Flexible Payment Options**: Support for Cash on Delivery (COD), Stripe, bKash, and Nagad payments
+- **Order Tracking**: Comprehensive order history with status updates and invoice generation
+- **Review System**: Rate and review food items after delivery for community feedback
+- **Responsive Design**: Mobile-first UI with toast notifications and loading states
+- **Location Services**: Integrated FindUs component for store location discovery
+
+### 🛠️ Admin Dashboard
+- **Food Management**: Add, edit, list, and delete food items with image uploads
+- **Order Processing**: Real-time order status management (Pending → Processing → Out for Delivery → Delivered)
+- **Inventory Control**: Category-based food organization and stock management
+- **Reporting Tools**: Admin-side invoice printing and order analytics
+- **User Management**: Role-based access control for admin and regular users
+- **Image Handling**: Seamless image uploads using Multer and Cloudinary integration
 
 ## 🥞 Tech Stack
 
-- **Frontend**: React.js, Vite, React Router, Context API
-- **Styling**: Vanilla CSS with modern responsive techniques
-- **Backend**: Node.js, Express.js
-- **Database**: MongoDB (Mongoose)
-- **Authentication**: JWT, bcrypt
-- **Payments**: Stripe API
-- **File Uploads**: Multer
+### Frontend
+- **React 19** - Modern UI library with hooks and functional components
+- **Vite** - Fast build tool and development server
+- **React Router** - Client-side routing for SPA navigation
+- **Context API** - State management for cart and user data
+- **Axios** - HTTP client for API communication
+- **React Toastify** - User-friendly notifications
+- **Vanilla CSS** - Custom styling with responsive design
 
-## 📦 Project Structure
-This repository contains a monorepo setup:
-- `/client` - The customer facing Vite React application
-- `/admin` - The restaurant staff facing Vite React administration panel 
-- `/server` - The Node/Express API backend
+### Backend
+- **Node.js** - JavaScript runtime for server-side logic
+- **Express.js** - Web framework for API development
+- **MongoDB** - NoSQL database with Mongoose ODM
+- **JWT** - Secure token-based authentication
+- **bcrypt** - Password hashing for security
+- **Multer** - File upload handling
+- **Cloudinary** - Cloud-based image storage and optimization
 
-## ⚙️ Installation & Setup
+### Payments & Integrations
+- **Stripe API** - Secure online payment processing
+- **CORS** - Cross-origin resource sharing configuration
+- **Validator** - Input validation and sanitization
 
-1. **Clone the repository:**
-   ```sh
-   git clone https://github.com/inbox-hasibur/MERN_Restaurant-management-system.git
-   ```
+## 📁 Project Structure
 
-2. **Setup Environment Variables:**
-   Navigate into the `/server` folder and create a `.env` file based on `.env.example`:
-   ```env
-   MONGO_URL=your_mongodb_connection_string
-   JWT_SECRET=your_jwt_secret
-   STRIPE_SECRET_KEY=your_stripe_secret_key
-   STRIPE_FRONTEND_URL=http://localhost:5173
-   PORT=4000
-   ```
+```
+cafeteria-management-system/
+├── client/                 # React frontend application
+│   ├── public/            # Static assets
+│   ├── src/
+│   │   ├── components/    # Reusable UI components
+│   │   │   ├── admin/     # Admin-specific components
+│   │   │   ├── ExploreMenu/
+│   │   │   ├── FoodDisplay/
+│   │   │   ├── FoodItem/
+│   │   │   ├── Header/
+│   │   │   ├── Navbar/
+│   │   │   ├── LoginPopup/
+│   │   │   ├── FindUs/
+│   │   │   └── Footer/
+│   │   ├── pages/         # Page components
+│   │   │   ├── admin/     # Admin pages (Add, List, Orders)
+│   │   │   ├── Cart/
+│   │   │   ├── Home/
+│   │   │   ├── MyOrders/
+│   │   │   ├── PlaceOrder/
+│   │   │   └── Verify/
+│   │   ├── context/       # React Context for state management
+│   │   ├── utils/         # Utility functions and API config
+│   │   └── App.jsx        # Main application component
+│   ├── package.json
+│   └── vite.config.js
+├── server/                 # Node.js backend API
+│   ├── src/
+│   │   ├── config/        # Database and configuration
+│   │   ├── controllers/   # Business logic handlers
+│   │   ├── middleware/    # Authentication and security
+│   │   ├── models/        # MongoDB schemas
+│   │   ├── routes/        # API endpoints
+│   │   └── server.js      # Main server file
+│   ├── uploads/           # Local file storage
+│   ├── package.json
+│   └── render.yaml        # Deployment configuration
+├── admin/                  # Admin panel (integrated into client)
+└── README.md
+```
 
-3. **Install Dependencies and Run:**
-   You will only need **two terminals** now because the Admin and Client have been unified into one React app!
+## 🚀 Installation & Setup
 
-   *Terminal 1 (Backend API Server):*
-   ```sh
-   cd server
-   npm install
-   npm run dev
-   ```
+### Prerequisites
+- Node.js (v18 or higher)
+- MongoDB (local or cloud instance)
+- Git
 
-   *Terminal 2 (Unified Frontend):*
-   ```sh
-   cd client
-   npm install
-   npm run dev
-   ```
+### 1. Clone the Repository
+```bash
+git clone https://github.com/inbox-hasibur/MERN_Restaurant-management-system.git
+cd cafeteria-management-system
+```
 
-## 🔒 Admin Credentials
+### 2. Backend Setup
+```bash
+cd server
+npm install
+```
 
-To access the backend Food and Order management portal, click "Sign In" on the Navbar, select the **Admin Login** toggle option, and use the following default root access credentials:
+Create a `.env` file in the `server` directory:
+```env
+MONGO_URL=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret_key
+STRIPE_SECRET_KEY=your_stripe_secret_key
+STRIPE_FRONTEND_URL=http://localhost:5173
+PORT=4000
+ALLOWED_ORIGINS=http://localhost:5173,http://localhost:5174
+CLOUDINARY_NAME=your_cloudinary_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_SECRET_KEY=your_cloudinary_secret_key
+```
 
-- **Username / Email:** `admin`
-- **Password:** `admin123`
+Start the backend server:
+```bash
+npm run dev
+```
 
-## 🌐 Live URLs
+### 3. Frontend Setup
+```bash
+cd ../client
+npm install
+npm run dev
+```
 
-- **Client**: https://iubat-lemonlime.vercel.app/
-- **Admin**: https://mern-rms.vercel.app/
-- **API Server**: https://mern-rms.onrender.com
+The application will be available at:
+- **Client**: http://localhost:5173
+- **Admin**: Access via client with admin credentials
 
-*(Note: Provide your own configuration variables in the client and admin `config.js` to point to a custom local or hosted server)*
+## 🔑 Admin Access
+
+To access the admin dashboard:
+1. Navigate to the client application
+2. Click "Sign In" on the navbar
+3. Toggle to "Admin Login"
+4. Use these credentials:
+   - **Email**: admin
+   - **Password**: admin123
+
+## 🌐 Live Demo
+
+- **Client Application**: [https://lemonlime-iubat.vercel.app/](https://lemonlime-iubat.vercel.app/)
+- **Admin Dashboard**: [https://mern-rms.vercel.app/](https://mern-rms.vercel.app/)
+- **API Server**: [https://mern-rms.onrender.com](https://mern-rms.onrender.com)
+
+## 📡 API Endpoints
+
+### Food Management
+- `GET /api/food/list` - Get all food items
+- `POST /api/food/add` - Add new food item (Admin)
+- `POST /api/food/remove` - Remove food item (Admin)
+
+### User Management
+- `POST /api/user/register` - User registration
+- `POST /api/user/login` - User login
+- `POST /api/user/admin` - Admin login
+
+### Cart Operations
+- `POST /api/cart/add` - Add item to cart
+- `POST /api/cart/remove` - Remove item from cart
+- `POST /api/cart/get` - Get user's cart
+
+### Order Management
+- `POST /api/orders/place` - Place new order
+- `POST /api/orders/verify` - Verify payment
+- `POST /api/orders/userorders` - Get user's orders
+- `GET /api/orders/list` - Get all orders (Admin)
+- `POST /api/orders/status` - Update order status (Admin)
+
+### Review System
+- `POST /api/review/add` - Add food review
+- `GET /api/review/food/:foodId` - Get reviews for food item
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the ISC License - see the [LICENSE](LICENSE) file for details.
+
+## 📞 Support
+
+For support or questions, please open an issue on GitHub or contact the maintainers.
+
+---
+
+**Built with ❤️ for efficient cafeteria management**
