@@ -49,8 +49,10 @@ const List = () => {
         <div className="list-table-format title">
           <b>Image</b>
           <b>Name</b>
+          <b>Description</b>
           <b>Category</b>
           <b>Price</b>
+          <b>Rating</b>
           <b>Action</b>
         </div>
 
@@ -58,9 +60,17 @@ const List = () => {
           list.map((item, index) => (
             <div key={index} className="list-table-format">
               <img src={item.image && item.image.startsWith("http") ? item.image : API_BASE + "/images/" + item.image} alt={item.name} />
-              <p>{item.name}</p>
-              <p>{item.category}</p>
-              <p>BDT {item.price}</p>
+              <div className="item-details">
+                <p className="item-name">{item.name}</p>
+              </div>
+              <p className="item-description">{item.description.length > 50 ? item.description.substring(0, 50) + '...' : item.description}</p>
+              <p className="item-category">{item.category}</p>
+              <p className="item-price">BDT {item.price}</p>
+              <div className="item-rating">
+                <span className="rating-stars">{'★'.repeat(Math.floor(item.averageRating))}</span>
+                <span className="rating-value">({item.averageRating.toFixed(1)})</span>
+                <p className="review-count">{item.totalReviews} reviews</p>
+              </div>
               <button
                 onClick={() => removeFood(item._id)}
                 className="delete-button"

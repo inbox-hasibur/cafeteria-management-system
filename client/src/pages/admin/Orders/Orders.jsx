@@ -102,6 +102,11 @@ const Orders = () => {
           return (
             <div key={index} className="my-orders-order">
               <img src={assets.parcel_icon} alt="" />
+              <div className="order-info">
+                <p className="order-id">Order #{order._id.slice(-6)}</p>
+                <p className="order-customer">{order.address.firstName} {order.address.lastName}</p>
+                <p className="order-date">{new Date(order.createdAt).toLocaleDateString()}</p>
+              </div>
               <p className="order-items">
                 {order.items.map((item, index) => {
                   if (index === order.items.length - 1) {
@@ -111,9 +116,9 @@ const Orders = () => {
                   }
                 })}
               </p>
-              <p>BDT {order.amount}</p>
-              <p>Items: {order.items.length}</p>
-              <p><strong>Token: {order.token}</strong></p>
+              <p className="order-amount">BDT {order.amount}</p>
+              <p className="order-item-count">Items: {order.items.length}</p>
+              <p className="order-token"><strong>Token: {order.token}</strong></p>
               
               <div className="status-container">
                 <select 
