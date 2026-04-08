@@ -17,7 +17,7 @@
   gap: 15px;
   text-align: center;
   overflow-x: auto;
-  padding-bottom: 15px;
+  padding: 0px 20px 15px 5px; /* Added right padding to prevent cutoff */
   scrollbar-width: none;
 }
 
@@ -40,9 +40,13 @@
 }
 
 .explore-menu-list-item:hover {
-  background-color: var(--hover-bg);
+  background-color: var(--primary-color);
   transform: translateY(-2px);
   border-color: var(--primary-color);
+}
+
+.explore-menu-list-item:hover p {
+  color: black !important;
 }
 
 .explore-menu-list-item.active {
@@ -52,7 +56,7 @@
 }
 
 .explore-menu-list-item.active p {
-  color: white !important;
+  color: black !important;
 }
 
 .menu-icon {
