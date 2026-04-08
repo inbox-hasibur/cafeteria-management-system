@@ -30,7 +30,7 @@
 
 .refresh-btn:hover {
   background: var(--hover-bg);
-  transform: rotate(15deg);
+  transform: none;
 }
 
 /* Loading skeletons */

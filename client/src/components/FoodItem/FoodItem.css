@@ -2,7 +2,7 @@
   width: 100%;
   border-radius: 15px;
   box-shadow: 0px 4px 12px var(--shadow-color, rgba(0,0,0,0.05));
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: box-shadow 0.2s ease;
   background-color: var(--card-bg, white);
   overflow: hidden;
   display: flex;
@@ -10,8 +10,7 @@
 }
 
 .food-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0px 8px 24px var(--shadow-color, rgba(0,0,0,0.1));
+  box-shadow: 0px 6px 18px var(--shadow-color, rgba(0,0,0,0.1));
 }
 
 /* Fixed aspect ratio for uniform image sizes across all cards */
@@ -29,11 +28,11 @@
   object-fit: cover;
   display: block;
   border-radius: 0;
-  transition: transform 0.4s ease;
+  transition: none;
 }
 
 .food-item:hover .food-item-image {
-  transform: scale(1.04);
+  transform: none;
 }
 
 .food-item-img-container .add {
@@ -43,12 +42,12 @@
   right: 15px;
   cursor: pointer;
   border-radius: 50%;
-  transition: transform 0.2s;
+  transition: none;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
 }
 
 .food-item-img-container .add:hover {
-  transform: scale(1.15);
+  transform: none;
 }
 
 .food-item-counter {
@@ -75,11 +74,11 @@
 .food-item-counter img {
   width: 28px;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: none;
 }
 
 .food-item-counter img:hover {
-  transform: scale(1.15);
+  transform: none;
 }
 
 /* Info section grows to fill remaining card height uniformly */

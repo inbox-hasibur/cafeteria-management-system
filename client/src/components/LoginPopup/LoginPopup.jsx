@@ -9,11 +9,12 @@ const LoginPopup = ({ setShowLogin }) => {
   const { setToken } = useContext(StoreContext);
 
   const [currentState, setCurrentState] = useState("Login");
+  const [accountType, setAccountType] = useState("user");
   const [data, setData] = useState({ name: "", email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const isAdminMode = currentState === "Admin Login";
+  const isAdminMode = accountType === "admin";
 
   const onChangeHandler = (event) => {
     const name = event.target.name;
@@ -61,8 +62,27 @@ const LoginPopup = ({ setShowLogin }) => {
   return (
     <div className="login-popup">
       <form onSubmit={onLogin} className="login-popup-container">
+        <div className="login-mode-slider">
+          <button
+            type="button"
+            className={accountType === "user" ? "active" : ""}
+            onClick={() => setAccountType("user")}
+          >
+            User
+          </button>
+          <button
+            type="button"
+            className={accountType === "admin" ? "active" : ""}
+            onClick={() => {
+              setAccountType("admin");
+              if (currentState === "Sign Up") setCurrentState("Login");
+            }}
+          >
+            Admin
+          </button>
+        </div>
         <div className="login-popup-title">
-          <h2>{currentState}</h2>
+          <h2>{isAdminMode ? "Admin Login" : currentState}</h2>
           <img
             onClick={() => setShowLogin(false)}
             src={assets.cross_icon}
@@ -120,17 +140,11 @@ const LoginPopup = ({ setShowLogin }) => {
             : "Login"}
         </button>
 
-        {currentState === "Login" && (
+        {currentState === "Login" && !isAdminMode && (
           <>
             <p>
               Don't have an account?{" "}
               <span onClick={() => setCurrentState("Sign Up")}>Sign Up</span>
-            </p>
-            <p>
-              Are you an Admin?{" "}
-              <span onClick={() => setCurrentState("Admin Login")}>
-                Admin Login
-              </span>
             </p>
           </>
         )}
@@ -138,12 +152,6 @@ const LoginPopup = ({ setShowLogin }) => {
           <p>
             Already have an account?{" "}
             <span onClick={() => setCurrentState("Login")}>Login here</span>
-          </p>
-        )}
-        {currentState === "Admin Login" && (
-          <p>
-            Back to Customer?{" "}
-            <span onClick={() => setCurrentState("Login")}>Login</span>
           </p>
         )}
       </form>

@@ -20,29 +20,40 @@ const placeOrder = async (req, res) => {
       return res.json({ success: false, message: "No items in order" });
     }
 
-    // Generate unique token
-    let token;
-    do {
-      token = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit token
-    } while (await orderModel.findOne({ token }));
+    // 1. Create order in Database with token retry (avoids duplicate token race condition)
+    let newOrder = null;
+    let lastSaveError = null;
+    for (let attempt = 0; attempt < 6; attempt += 1) {
+      const token = Math.floor(100000 + Math.random() * 900000).toString();
+      try {
+        newOrder = new orderModel({
+          userId: req.userId,
+          items: items.map(item => ({
+            foodId: item.foodId,
+            name: item.name,
+            quantity: item.quantity,
+            price: item.price,
+          })),
+          amount: amount,
+          address: address,
+          paymentMethod: paymentMethod,
+          payment: false,
+          token,
+        });
+        await newOrder.save();
+        lastSaveError = null;
+        break;
+      } catch (saveError) {
+        lastSaveError = saveError;
+        if (saveError?.code !== 11000) {
+          throw saveError;
+        }
+      }
+    }
 
-    // 1. Create order in Database
-    const newOrder = new orderModel({
-      userId: req.userId,
-      items: items.map(item => ({
-        foodId: item.foodId,
-        name: item.name,
-        quantity: item.quantity,
-        price: item.price,
-      })),
-      amount: amount,
-      address: address,
-      paymentMethod: paymentMethod,
-      payment: false, // always false initially; updated after payment confirmed
-      token: token,
-    });
-
-    await newOrder.save();
+    if (!newOrder || lastSaveError) {
+      throw new Error("Unable to place order now. Please try again.");
+    }
 
     // 2. Clear user cart in DB
     await userModel.findByIdAndUpdate(req.userId, { cartData: {} });
