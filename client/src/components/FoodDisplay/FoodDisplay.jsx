@@ -19,10 +19,14 @@ const FoodDisplay = () => {
 
   const filteredFoods = food_list.filter((item) => {
     const matchesCategory = category === "All" || category === item.category;
-    const searchLower = (searchQuery || "").toLowerCase();
-    const matchesSearch =
-      (item.name || "").toLowerCase().includes(searchLower) ||
-      (item.description || "").toLowerCase().includes(searchLower);
+    const searchTerms = (searchQuery || "").toLowerCase().trim().split(/\s+/);
+    
+    const matchesSearch = searchTerms.every(term => 
+      (item.name || "").toLowerCase().includes(term) ||
+      (item.description || "").toLowerCase().includes(term) ||
+      (item.category || "").toLowerCase().includes(term)
+    );
+    
     return matchesCategory && matchesSearch;
   });
 

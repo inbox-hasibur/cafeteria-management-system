@@ -71,6 +71,14 @@
 .find-us-right {
     flex: 1;
     min-height: 400px;
+    display: flex;
+}
+
+.find-us-right iframe {
+    flex: 1;
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 
 @media (max-width: 900px) {
